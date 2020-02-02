@@ -55,12 +55,20 @@ def search_petfinder():
 
     return data
 
+
+def search_data_map(data):
+  """Mapping function to extract needed information from search_petfinder / 
+     Get Animals endpoint API response"""
+     pass
+
+
+
 def shelter_info():
   """Return API response for shelter information using the organization ID 
     associated to the cat from search_petfinder, get organization endpoint"""
     token = get_token()
     url = "https://api.petfinder.com/v2/organizations/{id}"
-
+    pass
 
 
 #data from get_animals endpoint:
