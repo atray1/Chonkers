@@ -17,6 +17,8 @@ class Shelter(db.Model):
     email = db.Column(db.String(25), nullable=True)
     url = db.Column(db.String(1500), nullable=True)
 
+    cats = db.relationship('Cat')
+
 
 class Cat(db.Model):
     """Cat data that a user favorited"""
@@ -32,7 +34,8 @@ class Cat(db.Model):
                            db.ForeignKey('shelters.shelter_id'),
                            nullable=False,)
 
-    shelter = db.relationship('Shelter')
+    shelters = db.relationship('Shelter')
+    favorites = db.relationship('Favorite')
 
     # if a user favs a cat then the cat info should be saved in this table
 
@@ -61,6 +64,8 @@ class User(db.Model)
     user_id = db.Column(db.Integer, autoincrement=True, primary_key=True,)
     username = db.Column(db.String(25), unique=True, nullable=False,)
     password = db.Column(db.String(50), nullable=False,)
+
+    favorites = db.relationship('Favorite')
 
 
 def connect_to_db(app):
