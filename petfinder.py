@@ -14,9 +14,9 @@ def get_token():
     
     url = "https://api.petfinder.com/v2/oauth2/token"
     data = {
-      'grant_type': 'client_credentials',
-      'client_id': API_KEY,
-      'client_secret': SECRET_KEY
+        'grant_type': 'client_credentials',
+        'client_id': API_KEY,
+        'client_secret': SECRET_KEY
     }
     response = requests.post(url, data=data)
     res = response.json()
@@ -36,39 +36,50 @@ def search_petfinder():
     size = request.args.get('thickness', '')
     
     if size == 'large':
-      payload = {'type': 'Cat',
-                 'limit': 1, 
-                 'location': location_search,
-                 'distance': miles,
-                 'size': 'large'}
-      response = requests.get(url, headers=headers, params=payload)
-      data = response.json() #python dictionary
-
+        payload = {'type': 'Cat',
+                   'limit': 50, 
+                   'location': location_search,
+                   'distance': miles,
+                   'size': 'large'}
+        response = requests.get(url, headers=headers, params=payload)
+        data = response.json() #python dictionary
     else:
-      payload = {'type': 'Cat',
-                 'limit': 1, 
-                 'location': location_search,
-                 'distance': miles,
-                 'size': 'xlarge'}
-      response = requests.get(url, headers=headers, params=payload)
-      data = response.json()
+        payload = {'type': 'Cat',
+                   'limit': 50, 
+                   'location': location_search,
+                   'distance': miles,
+                   'size': 'xlarge'}
+        response = requests.get(url, headers=headers, params=payload)
+        data = response.json()
 
     return data
 
 
-def search_data_map(data):
-  """Mapping function to extract needed information from search_petfinder / 
-     Get Animals endpoint API response"""
-     pass
+def search_data_map():
+    """Mapping function to extract relevant information from search_petfinder"""
+    
+    fatty_dict = {}
+    cats = search_petfinder() 
+
+    for cat in cats['animals']:
+        fatty_dict[cat['id']] = {
+                                'name': cat['name'], 
+                                'gender': cat['gender'],
+                                'breed': cat['breeds']['primary'],
+                                'shelter_id': cat['organization_id'], 
+                                'photo_url': {'medium': cat['photos'][0]['medium'], 
+                                              'large': cat['photos'][0]['large']}
+                                }
+
+    return fatty_dict
 
 
-
-def shelter_info():
-  """Return API response for shelter information using the organization ID 
-    associated to the cat from search_petfinder, get organization endpoint"""
-    token = get_token()
-    url = "https://api.petfinder.com/v2/organizations/{id}"
-    pass
+# def shelter_info():
+#   """Return API response for shelter information using the organization ID 
+#     associated to the cat from search_petfinder, get organization endpoint"""
+#     token = get_token()
+#     url = "https://api.petfinder.com/v2/organizations/{id}"
+#     pass
 
 
 #data from get_animals endpoint:

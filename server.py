@@ -12,7 +12,7 @@ app.jinja_env.undefined = StrictUndefined
 def index():
     """Homepage, search bar"""
 
-    #add a login in button - redirect to /login-form
+    #add a login button - redirect to /login-form
     #add sign-up button - redirect to /sign-up-form
     
     return render_template("homepage.html")
@@ -22,8 +22,9 @@ def index():
 def cat_results():
     """Based on user search, display cats - get animals endpoint"""
 
-    cats = petfinder.search_petfinder()
-    return cats
+    cats = petfinder.search_data_map()
+    return render_template('search_results.html',
+                            cats=cats)
     #React thoughts/notes
     # your going to return cats as a json and react will hit this endpoint
     # to get the returned cats response data
@@ -75,7 +76,7 @@ def sign_up_form():
 
 
 @app.route('/sign-up-verification')
-def successful_sign_up():
+def sign_up():
     """Chonkers sign up verification"""
 
     #get username and password that was filled in sign-up form

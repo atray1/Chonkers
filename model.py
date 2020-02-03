@@ -3,19 +3,19 @@ from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
 class Shelter(db.Model):
-    """Animal Shelters for Favorited cats"""
+    """Animal shelters for favorite cats"""
 
     __tablename__ = "shelters"
 
-    shelter_id = db.Column(db.String(10), primary_key=True)
-    name = db.Column(db.String(150), nullable=False)
-    address = db.Column(db.String(150), nullable=False)
-    city = db.Column(db.String(25), nullable=False)
-    state = db.Column(db.String(2), nullable=False)
-    zipcode = db.Column(db.String(15), nullable=False)
-    phone = db.Column(db.String(15), nullable=False)
-    email = db.Column(db.String(25), nullable=True)
-    url = db.Column(db.String(1500), nullable=True)
+    shelter_id = db.Column(db.String(10), primary_key=True,)
+    name = db.Column(db.String(150), nullable=False,)
+    address = db.Column(db.String(150), nullable=False,)
+    city = db.Column(db.String(25), nullable=False,)
+    state = db.Column(db.String(2), nullable=False,)
+    zipcode = db.Column(db.String(15), nullable=False,)
+    phone = db.Column(db.String(15), nullable=False,)
+    email = db.Column(db.String(25), nullable=True,)
+    url = db.Column(db.String(1500), nullable=True,)
 
     cats = db.relationship('Cat')
 
@@ -34,12 +34,12 @@ class Cat(db.Model):
                            db.ForeignKey('shelters.shelter_id'),
                            nullable=False,)
 
-    shelters = db.relationship('Shelter')
+    shelter = db.relationship('Shelter')
     favorites = db.relationship('Favorite')
 
     # if a user favs a cat then the cat info should be saved in this table
 
-class Favorite(db.Model)
+class Favorite(db.Model):
     """User favorites list"""
 
     __tablename__ = "favorites"
@@ -52,11 +52,11 @@ class Favorite(db.Model)
                         db.ForeignKey('users.user_id'),
                         nullable=False,)
 
-    cat = db.relationship('Cat')
+    cats = db.relationship('Cat')
     user = db.relationship('User')
 
 
-class User(db.Model)
+class User(db.Model):
     """User of Chonkers"""
 
     __tablename__ = "users"
