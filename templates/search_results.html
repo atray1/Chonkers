@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    {% for cat in cats.values() %}
+        <div class='cat-div'>
+            <img class='medium-image' src="{{cat['photo_url']['medium']}}">
+        </div>
+    {% endfor %}
+
+{% endblock %}

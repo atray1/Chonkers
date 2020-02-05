@@ -29,7 +29,7 @@ def search_petfinder():
     """Return API response based on user search input, get animals endpoint"""
 
     token = get_token()
-    url = "https://api.petfinder.com/v2/animals"
+    url = 'https://api.petfinder.com/v2/animals'
     headers = {'Authorization': token}
     location_search = request.args.get('search', '')
     miles = int(request.args.get('miles', ''))
@@ -37,7 +37,7 @@ def search_petfinder():
     
     if size == 'large':
         payload = {'type': 'Cat',
-                   'limit': 50, 
+                   'limit': 5, 
                    'location': location_search,
                    'distance': miles,
                    'size': 'large'}
@@ -45,7 +45,7 @@ def search_petfinder():
         data = response.json() #python dictionary
     else:
         payload = {'type': 'Cat',
-                   'limit': 50, 
+                   'limit': 5, 
                    'location': location_search,
                    'distance': miles,
                    'size': 'xlarge'}
@@ -68,18 +68,32 @@ def search_data_map():
                                 'breed': cat['breeds']['primary'],
                                 'shelter_id': cat['organization_id'], 
                                 'photo_url': {'medium': cat['photos'][0]['medium'], 
-                                              'large': cat['photos'][0]['large']}
+                                              'large': cat['photos'][0]['large']},
+                                'coat_len': cat['coat'],
+                                'color': cat['colors']['primary'],
+                                'extra_love': cat['attributes']['special_needs'],
+                                'environment': {'kids': cat['environment']['children'],
+                                                'dogs': cat['environment']['dogs'],
+                                                'cats': cat['environment']['cats']}
                                 }
 
     return fatty_dict
 
 
-# def shelter_info():
-#   """Return API response for shelter information using the organization ID 
-#     associated to the cat from search_petfinder, get organization endpoint"""
-#     token = get_token()
-#     url = "https://api.petfinder.com/v2/organizations/{id}"
-#     pass
+
+
+def shelter_info():
+    shelter_id = 'CA560'
+    """Return API response for shelter information using the organization ID 
+    associated to the cat from search_petfinder, get organization endpoint"""
+    token = get_token()
+    url = 'https://api.petfinder.com/v2/organizations/' + shelter_id
+    headers = {'Authorization': token}
+    payload = {'id': shelter_id}
+    response = requests.get(url, headers=headers, params=payload)
+    data = response.json()
+    
+    return data
 
 
 #data from get_animals endpoint:

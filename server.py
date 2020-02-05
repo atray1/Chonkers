@@ -23,13 +23,25 @@ def cat_results():
     """Based on user search, display cats - get animals endpoint"""
 
     cats = petfinder.search_data_map()
+
     return render_template('search_results.html',
                             cats=cats)
+
+
     #React thoughts/notes
     # your going to return cats as a json and react will hit this endpoint
     # to get the returned cats response data
     # react component - divs for each cat
     # react props - unique information for each cat
+
+ #    Filters after they search 
+ #      move level on chonk here
+ #      - Breed
+ #      - Gender
+ #      - Friendly with / good with
+ #      - Coat length
+ #      - Color
+ #      - Special needs (extra love) checkbox
 
     #NOTES
     #API response cat data format
@@ -66,9 +78,11 @@ def cat_details(cat_id):
 
     #info will come from the API directly
     #if user selects <3 to favorite a cat then redirct to the login page
-    
+
     #AB
     #render_template
+
+    ##SEEMA - make the api request for the shelter info here
 
 @app.route('/sign-up-form')
 def sign_up_form():
@@ -78,6 +92,7 @@ def sign_up_form():
 @app.route('/sign-up-verification')
 def sign_up():
     """Chonkers sign up verification"""
+    #POST - the info coming from the sign-up-form
 
     #get username and password that was filled in sign-up form
     #if username exits - flash "username taken" and redirct to /sign-up-form
