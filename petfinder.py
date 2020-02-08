@@ -13,11 +13,9 @@ def get_token():
     """Returns authorization token from petfinder"""
     
     url = "https://api.petfinder.com/v2/oauth2/token"
-    data = {
-        'grant_type': 'client_credentials',
-        'client_id': API_KEY,
-        'client_secret': SECRET_KEY
-    }
+    data = {'grant_type': 'client_credentials',
+            'client_id': API_KEY,
+            'client_secret': SECRET_KEY}
     response = requests.post(url, data=data)
     res = response.json()
     token = res['token_type'] + ' ' + res['access_token']
@@ -63,23 +61,21 @@ def search_data_map():
 
     for cat in cats['animals']:
         fatty_dict[cat['id']] = {
-                                'name': cat['name'], 
-                                'gender': cat['gender'],
-                                'breed': cat['breeds']['primary'],
-                                'shelter_id': cat['organization_id'], 
-                                'photo_url': {'medium': cat['photos'][0]['medium'], 
-                                              'large': cat['photos'][0]['large']},
-                                'coat_len': cat['coat'],
-                                'color': cat['colors']['primary'],
-                                'extra_love': cat['attributes']['special_needs'],
-                                'environment': {'kids': cat['environment']['children'],
-                                                'dogs': cat['environment']['dogs'],
-                                                'cats': cat['environment']['cats']}
-                                }
-
+                        'name': cat['name'], 
+                        'gender': cat['gender'],
+                        'breed': cat['breeds']['primary'],
+                        'shelter_id': cat['organization_id'], 
+                        'photo_url': {'medium': cat['photos'][0]['medium'], 
+                                      'large': cat['photos'][0]['large']},
+                        'coat_len': cat['coat'],
+                        'color': cat['colors']['primary'],
+                        'extra_love': cat['attributes']['special_needs'],
+                        'environment': {'kids': cat['environment']['children'],
+                                        'dogs': cat['environment']['dogs'],
+                                        'cats': cat['environment']['cats']}
+                        }
+                        
     return fatty_dict
-
-
 
 
 def shelter_info():
@@ -96,13 +92,26 @@ def shelter_info():
     return data
 
 
-#data from get_animals endpoint:
-#SHELTERS Table
-#organization_id = data['animals'][0]['organization_id']
+def shelter_data_map():
+    """Mapping function to extract relevant information from shelter_info"""
 
+    shelter_details = {}
+    shelter = shelter_info()
+    org = shelter['organization']
+    
+    shelter_details[org['id']] = {
+                            'name': org['name'],
+                            'phone': org['phone'],
+                            'email': org['email'],
+                            'url': org['url'],
+                            'loaction': {'address': org['address']['address1'],
+                                         'city': org['address']['city'],
+                                         'state': org['address']['state'],
+                                         'zipcode': org['address']['postcode'],
+                                         'country': org['address']['country']}
+                            }
 
-
-
+    return shelter_details
 
 # demo show SF, if SF location is chosen then get images from the database and not the API
 ##select random images but keep track of what's being pulled
