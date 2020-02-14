@@ -1,11 +1,34 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
-    {% for cat in cats.values() %}
-        <div class='cat-div'>
-            <img class='medium-image' src="{{cat['photo_url']['medium']}}">
-        </div>
-    {% endfor %}
-
+    <div id="cat-dict" class="row">
+        {% for cat in cats %}
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4 cat-summary">
+                <div class="vessel">
+                        <a href="/more-details/{{ cat.cat_id }}/{{ cat.shelter_id }}">
+                            <img class="medium-image" src="{{cat['photo_url']['medium']}}">
+                            <br>
+                            Name: {{ cat.name }}
+                        </a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <div>
+        <form action="/search-results">
+            <select name="color">
+                <option value="Black">Color</option>
+            </select>
+        </form>
+    </div>
 {% endblock %}
+
+
+<!-- #    Filters after they search 
+ #      move level on chonk here
+ #      - Breed
+ #      - Gender
+ #      - Friendly with / good with
+ #      - Coat length
+ #      - Color
+ #      - Special needs (extra love) checkbox -->

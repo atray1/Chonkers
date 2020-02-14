@@ -1,5 +1,5 @@
 from jinja2 import StrictUndefined
-from flask import Flask, render_template, redirect, request, flash, session
+from flask import Flask, render_template, redirect, request, flash, session, jsonify
 import petfinder
 from model import connect_to_db, db
 
@@ -23,6 +23,7 @@ def cat_results():
     """Based on user search, display cats - get animals endpoint"""
 
     cats = petfinder.search_data_map()
+    cats = list(cats.values())
 
     return render_template('search_results.html',
                             cats=cats)
@@ -34,55 +35,23 @@ def cat_results():
     # react component - divs for each cat
     # react props - unique information for each cat
 
- #    Filters after they search 
- #      move level on chonk here
- #      - Breed
- #      - Gender
- #      - Friendly with / good with
- #      - Coat length
- #      - Color
- #      - Special needs (extra love) checkbox
 
-    #NOTES
-    #API response cat data format
-    # for cat in cats['animals']:
-    #     cat_id = cat['id']
-    #     breed = cat['breeds']['primary']
-    #     name = cat['name']
-    #     gender = cat['gender']
-    #     organization_id = cat['organization_id'] -> use to get shelter info
-                                                    # using get organization endpoint
-
-#AB
-# {1: {'name': 'fatty', shelter: 7389} 2: {}}
-
-# parse this information from the API 
-
-# in your template loop over this info 
-
-# <div data-shelter-number={cat.shelter}>
-#     Name: {cat.name}
-#     <a href='/more-details/{cat.id}'
-# </div>
-
-
-
-@app.route('/more-details/<int:cat_id>/')
-def cat_details(cat_id): 
-    #ask about this since it't not saved to the db
-    #do I have to make a requests to both the get animal and get organization endpoints
-    #I'm not clear on how i am to grab the cat_id and shelter_id for the API requests
-
+@app.route('/more-details/<cat_id>/<shelter_id>')
+def cat_details(cat_id, shelter_id): 
     """Display full cat and shelter details when a cat is selected
        Use get animal and get organization endpoints"""
 
-    #info will come from the API directly
+    shelter = petfinder.shelter_data_map(shelter_id)
+    shelter = list(shelter.values())
+    cat = petfinder.cat_data_map(cat_id)
+    cat = list(cat.values())
+
+    return render_template('more_details.html',
+                            shelter=shelter,
+                            cat=cat)
+
     #if user selects <3 to favorite a cat then redirct to the login page
 
-    #AB
-    #render_template
-
-    ##SEEMA - make the api request for the shelter info here
 
 @app.route('/sign-up-form')
 def sign_up_form():

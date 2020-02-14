@@ -35,7 +35,7 @@ def search_petfinder():
     
     if size == 'large':
         payload = {'type': 'Cat',
-                   'limit': 5, 
+                   'limit': 25, 
                    'location': location_search,
                    'distance': miles,
                    'size': 'large'}
@@ -43,7 +43,7 @@ def search_petfinder():
         data = response.json() #python dictionary
     else:
         payload = {'type': 'Cat',
-                   'limit': 5, 
+                   'limit': 25, 
                    'location': location_search,
                    'distance': miles,
                    'size': 'xlarge'}
@@ -55,12 +55,13 @@ def search_petfinder():
 
 def search_data_map():
     """Mapping function to extract relevant information from search_petfinder"""
-    
+   
     fatty_dict = {}
     cats = search_petfinder() 
 
     for cat in cats['animals']:
         fatty_dict[cat['id']] = {
+                        'cat_id': cat['id'],
                         'name': cat['name'], 
                         'gender': cat['gender'],
                         'breed': cat['breeds']['primary'],
@@ -74,14 +75,15 @@ def search_data_map():
                                         'dogs': cat['environment']['dogs'],
                                         'cats': cat['environment']['cats']}
                         }
-                        
+
     return fatty_dict
 
 
-def shelter_info():
-    shelter_id = 'CA560'
+def shelter_info(shelter_id):
+    #shelter_id = 'CA560'
     """Return API response for shelter information using the organization ID 
     associated to the cat from search_petfinder, get organization endpoint"""
+    
     token = get_token()
     url = 'https://api.petfinder.com/v2/organizations/' + shelter_id
     headers = {'Authorization': token}
@@ -92,14 +94,15 @@ def shelter_info():
     return data
 
 
-def shelter_data_map():
+def shelter_data_map(shelter_id):
     """Mapping function to extract relevant information from shelter_info"""
 
     shelter_details = {}
-    shelter = shelter_info()
+    shelter = shelter_info(shelter_id)
     org = shelter['organization']
     
     shelter_details[org['id']] = {
+                            'shelter_id': org['id'],
                             'name': org['name'],
                             'phone': org['phone'],
                             'email': org['email'],
@@ -112,6 +115,47 @@ def shelter_data_map():
                             }
 
     return shelter_details
+
+
+def cat_info(cat_id):
+    #shelter_id = 'CA560'
+    """Return API response for selected cat for more cat details"""
+    
+    token = get_token()
+    url = 'https://api.petfinder.com/v2/animals/' + cat_id
+    headers = {'Authorization': token}
+    payload = {'id': cat_id}
+    response = requests.get(url, headers=headers, params=payload)
+    data = response.json()
+    return data
+
+
+def cat_data_map(cat_id):
+    """Mapping function to extract relevant details for selected cat"""
+   
+    fatty_dict = {}
+    fatty = cat_info(cat_id)
+    cat = fatty['animal']
+    print(cat)
+
+    fatty_dict[cat['id']] = {
+                    'cat_id': cat['id'],
+                    'name': cat['name'], 
+                    'gender': cat['gender'],
+                    'breed': cat['breeds']['primary'],
+                    'shelter_id': cat['organization_id'], 
+                    'photo_url': {'medium': cat['photos'][0]['medium'], 
+                                  'large': cat['photos'][0]['large']},
+                    'coat_len': cat['coat'],
+                    'color': cat['colors']['primary'],
+                    'extra_love': cat['attributes']['special_needs'],
+                    'environment': {'kids': cat['environment']['children'],
+                                    'dogs': cat['environment']['dogs'],
+                                    'cats': cat['environment']['cats']}
+                        }
+
+    return fatty_dict
+
 
 # demo show SF, if SF location is chosen then get images from the database and not the API
 ##select random images but keep track of what's being pulled
