@@ -8,6 +8,13 @@ app = Flask(__name__)
 #app.secret_key = "ABC"
 app.jinja_env.undefined = StrictUndefined
 
+
+@app.route('/react')
+def react():
+
+    return render_template('search_react.html')
+
+
 @app.route('/')
 def index():
     """Homepage, search bar"""
