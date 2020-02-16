@@ -1,6 +1,15 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("select[name=color]").change(function() {
+                $("#fur_color").submit();
+            })
+        }) 
+    </script>
+
     <div id="cat-dict" class="row">
         {% for cat in cats %}
             <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4 cat-summary">
@@ -15,9 +24,11 @@
         {% endfor %}
     </div>
     <div>
-        <form action="/search-results">
+        <form action="/search-results" id="fur_color">
+            Color
             <select name="color">
-                <option value="Black">Color</option>
+                <option value="all">All</option>
+                <option value="Black">Black</option>
             </select>
         </form>
     </div>

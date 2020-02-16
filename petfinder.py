@@ -32,24 +32,24 @@ def search_petfinder():
     location_search = request.args.get('search', '')
     miles = int(request.args.get('miles', ''))
     size = request.args.get('thickness', '')
+    color = request.args.get('color', '')
     
-    if size == 'large':
-        payload = {'type': 'Cat',
+    payload = {'type': 'Cat',
                    'limit': 25, 
                    'location': location_search,
-                   'distance': miles,
-                   'size': 'large'}
-        response = requests.get(url, headers=headers, params=payload)
-        data = response.json() #python dictionary
-    else:
-        payload = {'type': 'Cat',
-                   'limit': 25, 
-                   'location': location_search,
-                   'distance': miles,
-                   'size': 'xlarge'}
-        response = requests.get(url, headers=headers, params=payload)
-        data = response.json()
+                   'color': color,
+                   'distance': miles}
 
+    if size == 'large':
+        payload['size'] = 'large'
+        response = requests.get(url, headers=headers, params=payload)
+        data = response.json() 
+
+    elif size == 'xlarge' or 'all':
+        payload['size'] = 'xlarge'
+        response = requests.get(url, headers=headers, params=payload)
+        data = response.json() 
+    
     return data
 
 
