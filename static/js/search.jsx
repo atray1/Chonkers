@@ -17,18 +17,39 @@ class Search extends React.Component {
     
   constructor() {
     super();
-    this.state = { search: undefined, miles: 10, thickness: 'Jumbo Chonk' }
-    this.customMiles = this.customMiles.bind(this)
+    this.state = { search: undefined, miles: undefined, thickness: undefined }
+    this.handleInput = this.handleInput.bind(this)
   }
 
-  customMiles(e) {
-    this.setState({[e.target.miles]: e.target.value})
+  handleInput(e) {
+    this.setState({[e.target.name]: e.target.value})
+    
     let element = document.getElementById('miles');
-    if (e.target.value === 'other')
+    if (e.target.name === 'miles' || e.target.value === 'other') {
         element.style.display = 'block';
-    else
+    }
+    else {
         element.style.display = 'none';
+    }
   }
+
+  handleSubmit(e) {
+    e.preventDefault();
+
+    let search = this.state.search;
+    let miles = this.state.miles;
+    let thickness = this.state.miles;
+
+    let search_data = {
+      search: this.state.search,
+      miles: this.state.miles,
+      thickness: this.state.thickness
+    }
+
+    $.post('/search-results', search_data, (response) => console.log(response))
+
+  }
+
 
   render() {
     return (
@@ -36,12 +57,12 @@ class Search extends React.Component {
         <form>
           <label>
             Search:
-              <input name='search' type='text'/>
+              <input name='search' type='text' onChange={this.handleInput}/>
           </label>
           <br></br>
           <label>
           Distance:
-            <select name='miles' onChange={this.customMiles}>
+            <select name='miles' onChange={this.handleInput}>
               <option value='10'>10 Miles</option>
               <option value='25'>25 Miles</option>
               <option value='50'>50 Miles</option>
@@ -52,8 +73,8 @@ class Search extends React.Component {
           <input name='miles' id='miles' type='text' style={{display: this.element ? 'block' : 'none'}}></input>
           <br></br>
           <label>
-            Chonk Preference
-            <select name='thickness'>
+            Chonk Preference:
+            <select name='thickness' onChange={this.handleInput}>
               <option value='large'>Jumbo Chonk</option>
               <option value='xlarge'>Colossal Chonk</option>
               <option value='all'>All Chonkers Need Love</option>
