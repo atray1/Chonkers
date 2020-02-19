@@ -25,14 +25,14 @@ def get_token():
 
 def search_petfinder():
     """Return API response based on user search input, get animals endpoint"""
-
+    print(request.data)
     token = get_token()
     url = 'https://api.petfinder.com/v2/animals'
     headers = {'Authorization': token}
-    location_search = request.args.get('search', '')
-    miles = int(request.args.get('miles', ''))
-    size = request.args.get('thickness', '')
-    color = request.args.get('color', '')
+    location_search = request.form.get('search', '')
+    miles = int(request.form.get('miles', '25'))
+    size = request.form.get('thickness', '')
+    color = request.form.get('color', '')
     
     payload = {'type': 'Cat',
                    'limit': 25, 
@@ -55,26 +55,26 @@ def search_petfinder():
 
 def search_data_map():
     """Mapping function to extract relevant information from search_petfinder"""
-   
+    
     fatty_dict = {}
     cats = search_petfinder() 
-
     for cat in cats['animals']:
-        fatty_dict[cat['id']] = {
-                        'cat_id': cat['id'],
-                        'name': cat['name'], 
-                        'gender': cat['gender'],
-                        'breed': cat['breeds']['primary'],
-                        'shelter_id': cat['organization_id'], 
-                        'photo_url': {'medium': cat['photos'][0]['medium'], 
-                                      'large': cat['photos'][0]['large']},
-                        'coat_len': cat['coat'],
-                        'color': cat['colors']['primary'],
-                        'extra_love': cat['attributes']['special_needs'],
-                        'environment': {'kids': cat['environment']['children'],
-                                        'dogs': cat['environment']['dogs'],
-                                        'cats': cat['environment']['cats']}
-                        }
+        if cat['photos'] != []:
+            fatty_dict[cat['id']] = {
+                            'cat_id': cat['id'],
+                            'name': cat['name'], 
+                            'gender': cat['gender'],
+                            'breed': cat['breeds']['primary'],
+                            'shelter_id': cat['organization_id'], 
+                            'photo_url': {'medium': cat['photos'][0]['medium'], 
+                                          'large': cat['photos'][0]['large']},
+                            'coat_len': cat['coat'],
+                            'color': cat['colors']['primary'],
+                            'extra_love': cat['attributes']['special_needs'],
+                            'environment': {'kids': cat['environment']['children'],
+                                            'dogs': cat['environment']['dogs'],
+                                            'cats': cat['environment']['cats']}
+                            }
 
     return fatty_dict
 

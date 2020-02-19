@@ -15,6 +15,16 @@ def react():
     return render_template('search_react.html')
 
 
+@app.route('/results.json', methods=['POST'])
+def cat_results_react():
+    """Based on user search, display cats - get animals endpoint"""
+
+    cats = petfinder.search_data_map()
+    cats = list(cats.values())
+
+    return jsonify(cats)
+
+
 @app.route('/')
 def index():
     """Homepage, search bar"""

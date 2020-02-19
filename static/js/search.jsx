@@ -17,15 +17,16 @@ class Search extends React.Component {
     
   constructor() {
     super();
-    this.state = { search: undefined, miles: undefined, thickness: undefined }
+    this.state = { search: undefined, miles: 10, thickness: 'all' }
     this.handleInput = this.handleInput.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this)
   }
 
   handleInput(e) {
     this.setState({[e.target.name]: e.target.value})
     
     let element = document.getElementById('miles');
-    if (e.target.name === 'miles' || e.target.value === 'other') {
+    if (e.target.name === 'miles' && e.target.value === 'other') {
         element.style.display = 'block';
     }
     else {
@@ -41,15 +42,16 @@ class Search extends React.Component {
     let thickness = this.state.miles;
 
     let search_data = {
-      search: this.state.search,
-      miles: this.state.miles,
-      thickness: this.state.thickness
+      'search': this.state.search,
+      'miles': this.state.miles,
+      'thickness': this.state.thickness
     }
 
-    $.post('/search-results', search_data, (response) => console.log(response))
+    $.post('/results.json', search_data, (response) => { 
+      console.log(response)
+  })
 
   }
-
 
   render() {
     return (
@@ -62,7 +64,7 @@ class Search extends React.Component {
           <br></br>
           <label>
           Distance:
-            <select name='miles' onChange={this.handleInput}>
+            <select name='miles' defaultValue={this.state.miles} onChange={this.handleInput}>
               <option value='10'>10 Miles</option>
               <option value='25'>25 Miles</option>
               <option value='50'>50 Miles</option>
@@ -73,15 +75,15 @@ class Search extends React.Component {
           <input name='miles' id='miles' type='text' style={{display: this.element ? 'block' : 'none'}}></input>
           <br></br>
           <label>
-            Chonk Preference:
-            <select name='thickness' onChange={this.handleInput}>
+          Chonk Preference:
+            <select name='thickness' defaultValue={this.state.thickness} onChange={this.handleInput}>
               <option value='large'>Jumbo Chonk</option>
               <option value='xlarge'>Colossal Chonk</option>
               <option value='all'>All Chonkers Need Love</option>
             </select>
           </label>
           <br></br>
-          <input type='submit'></input>
+          <button onClick={this.handleSubmit}>Submit</button>
         </form>
       </div>
     );
