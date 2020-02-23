@@ -17,9 +17,14 @@ class Search extends React.Component {
     
   constructor() {
     super();
-    this.state = { search: undefined, miles: 10, thickness: 'all' }
-    this.handleInput = this.handleInput.bind(this)
-    this.handleSubmit = this.handleSubmit.bind(this)
+    this.state = { 
+      search: undefined,
+      miles: 10, 
+      thickness: 'all',
+      catResults: undefined
+    }
+    this.handleInput = this.handleInput.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleInput(e) {
@@ -40,20 +45,20 @@ class Search extends React.Component {
     let search = this.state.search;
     let miles = this.state.miles;
     let thickness = this.state.miles;
-
     let search_data = {
       'search': this.state.search,
       'miles': this.state.miles,
       'thickness': this.state.thickness
     }
-
+    
     $.post('/results.json', search_data, (response) => { 
-      console.log(response)
-  })
-
+      this.setState({catResults: response})
+    })
   }
 
   render() {
+    let cats = this.state.catResults
+    console.log('this is my results', cats)
     return (
       <div>
         <form>
@@ -85,11 +90,84 @@ class Search extends React.Component {
           <br></br>
           <button onClick={this.handleSubmit}>Submit</button>
         </form>
+
+        <div>
+        {/* connecting to the tubbocontainer class - making an instance - passing
+         results from api req as a prop. cats is the prop ---> this.props.cats*/}
+          <TubboContainer
+            cats={this.state.catResults}
+          /> 
+        </div>
+
       </div>
     );
   }
 
 }
+
+
+class TubboContainer extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { roundos: [] };
+    this.makeCats = this.makeCats.bind(this);
+  }
+
+  componentDidMount () {
+  }
+
+  makeCats() {
+    const cats = []
+    // loop over this.props.cats 
+    // this is the all results from the server 
+    // make a cat component out of each one
+    // put it in our list of cats
+    
+    //loop over results:
+      //cats.push(<Cat name={currentCat.name}>)
+    for (const cat of this.props.cats) {
+      cats.push(<Cat 
+                  key={cat.cat_id}
+                  name={cat.name}
+                  photo={cat.photo_url.medium}
+                />
+                );
+    }
+    return cats
+  }
+
+  render(){
+  {/* If the we got results back from the API then */}
+    if (this.props.cats) {
+      {/* return a div for each cat component in the cats list in makeCats */}
+      return (
+        <div>
+          {this.makeCats()}
+        </div>
+      );
+    } 
+    else {
+      return (
+        <div> Please enter a search </div>
+      );
+    }
+  }
+}
+
+class Cat extends React.Component {
+// use the cat components in the cats list, you made in makeCats, to display them individually
+  render() {
+    return (
+      <div className="chonk">
+        <img src={this.props.photo}/>
+        <p>{this.props.name}</p>
+      </div>
+    );
+  }
+}
+
+
+
 
 
 ReactDOM.render(<Search />, document.getElementById('app'));

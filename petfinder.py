@@ -25,11 +25,10 @@ def get_token():
 
 def search_petfinder():
     """Return API response based on user search input, get animals endpoint"""
-    print(request.data)
     token = get_token()
     url = 'https://api.petfinder.com/v2/animals'
     headers = {'Authorization': token}
-    location_search = request.form.get('search', '')
+    location_search = request.form.get('search')
     miles = int(request.form.get('miles', '25'))
     size = request.form.get('thickness', '')
     color = request.form.get('color', '')
@@ -136,7 +135,6 @@ def cat_data_map(cat_id):
     fatty_dict = {}
     fatty = cat_info(cat_id)
     cat = fatty['animal']
-    print(cat)
 
     fatty_dict[cat['id']] = {
                     'cat_id': cat['id'],
