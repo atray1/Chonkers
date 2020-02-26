@@ -13,8 +13,7 @@
 // }
 
 
-class Search extends React.Component {
-    
+class Search extends React.Component {    
   constructor() {
     super();
     this.state = { 
@@ -22,7 +21,7 @@ class Search extends React.Component {
       miles: 10, 
       thickness: 'all',
       catResults: undefined
-    }
+    };
     this.handleInput = this.handleInput.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -49,11 +48,11 @@ class Search extends React.Component {
       'search': this.state.search,
       'miles': this.state.miles,
       'thickness': this.state.thickness
-    }
+    };
     
     $.post('/results.json', search_data, (response) => { 
       this.setState({catResults: response})
-    })
+    });
   }
 
   render() {
@@ -62,11 +61,13 @@ class Search extends React.Component {
     return (
       <div>
         <form>
-          <label>
-            Search:
-              <input name='search' type='text' onChange={this.handleInput}/>
-          </label>
-          <br></br>
+          <div>
+            <label>
+              Search:
+                <input name='search' type='text' onChange={this.handleInput}/>
+            </label>
+          </div>
+          <div>
           <label>
           Distance:
             <select name='miles' defaultValue={this.state.miles} onChange={this.handleInput}>
@@ -78,7 +79,8 @@ class Search extends React.Component {
             </select>
           </label>
           <input name='miles' id='miles' type='text' style={{display: this.element ? 'block' : 'none'}}></input>
-          <br></br>
+          </div>
+          <div>
           <label>
           Chonk Preference:
             <select name='thickness' defaultValue={this.state.thickness} onChange={this.handleInput}>
@@ -87,11 +89,11 @@ class Search extends React.Component {
               <option value='all'>All Chonkers Need Love</option>
             </select>
           </label>
-          <br></br>
+          </div>
           <button onClick={this.handleSubmit}>Submit</button>
         </form>
 
-        <div>
+        <div id="response-all-cats">
         {/* connecting to the tubbocontainer class - making an instance - passing
          results from api req as a prop. cats is the prop ---> this.props.cats*/}
           <TubboContainer
@@ -102,47 +104,34 @@ class Search extends React.Component {
       </div>
     );
   }
-
 }
 
 
 class TubboContainer extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { roundos: [] };
     this.makeCats = this.makeCats.bind(this);
-  }
-
-  componentDidMount () {
   }
 
   makeCats() {
     const cats = []
-    // loop over this.props.cats 
-    // this is the all results from the server 
-    // make a cat component out of each one
-    // put it in our list of cats
-    
-    //loop over results:
-      //cats.push(<Cat name={currentCat.name}>)
     for (const cat of this.props.cats) {
       cats.push(<Cat 
                   key={cat.cat_id}
+                  catId={cat.cat_id}
                   name={cat.name}
                   photo={cat.photo_url.medium}
                 />
-                );
+               );
     }
     return cats
   }
 
-  render(){
-  {/* If the we got results back from the API then */}
+  render() {
     if (this.props.cats) {
-      {/* return a div for each cat component in the cats list in makeCats */}
       return (
-        <div>
-          {this.makeCats()}
+        <div id="prop-all-cats">
+          {this.makeCats()}          
         </div>
       );
     } 
@@ -154,20 +143,76 @@ class TubboContainer extends React.Component {
   }
 }
 
+
 class Cat extends React.Component {
-// use the cat components in the cats list, you made in makeCats, to display them individually
+  constructor(props) {
+    super(props);
+    this.state = {
+      catId: undefined,
+    };
+    this._onButtonClick = this._onButtonClick.bind(this);
+  }
+
+  _onButtonClick() {
+    // 
+// ReactDOM.render(
+//   <MoreDetails catId={this.props.catId}/>,
+//   document.getElementById('ap')
+// );
+    this.setState({
+      showComponent: true,
+    });
+  }
+
   render() {
     return (
-      <div className="chonk">
-        <img src={this.props.photo}/>
+      <div className="individ-cat">
+      <a href="/details">
+      <button onClick={this._onButtonClick}>
+        <img className="medium-image" src={this.props.photo}/>
         <p>{this.props.name}</p>
+      </button>
+      </a>
+      <div>
+      {this.state.showComponent ?
+        <MoreDetails catId={this.props.catId}/> :
+        null
+      }
+      </div>
+      
       </div>
     );
   }
 }
 
 
+// class MoreDetails extends React.Component {
+//   constructor(props) {
+//     super(props);
+//     console.log('in MoreDetails')
+//   }
+
+//   render() {
+//     return (
+//       <div>{this.props.catId}</div>
+//     )
+//   }
+// }
 
 
+// class App extends React.Component {
+//   constructor() {
+//     super();
 
-ReactDOM.render(<Search />, document.getElementById('app'));
+//     this.state = { currentPage: 0, pages: [<Search/>, <MoreDetails/>]};
+//   }
+//   render() {
+
+//   }
+// }
+
+
+ReactDOM.render(
+  <Search />, 
+  document.getElementById('app')
+);
