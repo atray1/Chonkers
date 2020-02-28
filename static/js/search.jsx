@@ -154,31 +154,32 @@ class Cat extends React.Component {
   }
 
   _onButtonClick() {
-    // 
+
 // ReactDOM.render(
 //   <MoreDetails catId={this.props.catId}/>,
-//   document.getElementById('ap')
+//   document.getElementById('app')
 // );
     this.setState({
       showComponent: true,
     });
-  }
+}
 
   render() {
+
     return (
       <div className="individ-cat">
-      <a href="/details">
+
       <button onClick={this._onButtonClick}>
         <img className="medium-image" src={this.props.photo}/>
         <p>{this.props.name}</p>
       </button>
-      </a>
+      
       <div>
       {this.state.showComponent ?
         <MoreDetails catId={this.props.catId}/> :
         null
       }
-      </div>
+      </div> 
       
       </div>
     );
@@ -186,33 +187,24 @@ class Cat extends React.Component {
 }
 
 
-// class MoreDetails extends React.Component {
-//   constructor(props) {
-//     super(props);
-//     console.log('in MoreDetails')
-//   }
 
-//   render() {
-//     return (
-//       <div>{this.props.catId}</div>
-//     )
-//   }
-// }
+class MoreDetails extends React.Component {
+  constructor(props) {
+    super(props);
+    console.log('in MoreDetails')
+  }
+
+  render() {
+    return (
+      <div>{this.props.catId}</div>
+    )
+  }
+}
 
 
-// class App extends React.Component {
-//   constructor() {
-//     super();
-
-//     this.state = { currentPage: 0, pages: [<Search/>, <MoreDetails/>]};
-//   }
-//   render() {
-
-//   }
-// }
 
 
 ReactDOM.render(
-  <Search />, 
+  <Search />,
   document.getElementById('app')
 );

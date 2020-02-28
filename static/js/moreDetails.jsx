@@ -13,5 +13,5 @@ class MoreDetails extends React.Component {
 
 ReactDOM.render(
   <MoreDetails />, 
-  document.getElementById('ap')
+  document.getElementById('app')
 );

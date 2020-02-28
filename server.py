@@ -14,6 +14,11 @@ def react():
 
     return render_template('search_react.html')
 
+@app.route('/details')
+def details():
+
+    return render_template("react_results.html")
+
 
 @app.route('/results.json', methods=['POST'])
 def cat_results_react():
