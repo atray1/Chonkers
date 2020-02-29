@@ -121,6 +121,15 @@ class TubboContainer extends React.Component {
                   catId={cat.cat_id}
                   name={cat.name}
                   photo={cat.photo_url.medium}
+                  gender={cat.gender}
+                  breed={cat.breed}
+                  coatLen={cat.coat_len}
+                  color={cat.color}
+                  extraLove={cat.extra_love}
+                  kids={cat.environment.kids}
+                  dogs={cat.environment.dogs}
+                  cats={cat.environment.cats}
+                  shelterId={cat.shelter_id}
                 />
                );
     }
@@ -148,7 +157,8 @@ class Cat extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      catId: undefined,
+      tubboLocation: undefined,
+      showComponent: false,
     };
     this._onButtonClick = this._onButtonClick.bind(this);
   }
@@ -159,24 +169,32 @@ class Cat extends React.Component {
 //   <MoreDetails catId={this.props.catId}/>,
 //   document.getElementById('app')
 // );
-    this.setState({
-      showComponent: true,
+    let shelter = {'shelter_id': this.props.shelterId}
+    console.log(shelter)
+    $.post('/shelter.json', shelter, (response) => { 
+      this.setState({tubboLocation: response, showComponent: true})
     });
-}
+  }
 
   render() {
-
     return (
       <div className="individ-cat">
 
       <button onClick={this._onButtonClick}>
-        <img className="medium-image" src={this.props.photo}/>
+        <img 
+          className="medium-image" 
+          src={this.props.photo} 
+          alt="HTML5"
+          style={{width: 350, height: 350}}
+         />
         <p>{this.props.name}</p>
       </button>
       
       <div>
       {this.state.showComponent ?
-        <MoreDetails catId={this.props.catId}/> :
+        <MoreDetails catId={this.props.catId}
+                     shelterId={this.props.shelterId}
+        /> :
         null
       }
       </div> 
@@ -191,7 +209,6 @@ class Cat extends React.Component {
 class MoreDetails extends React.Component {
   constructor(props) {
     super(props);
-    console.log('in MoreDetails')
   }
 
   render() {

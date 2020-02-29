@@ -14,12 +14,6 @@ def react():
 
     return render_template('search_react.html')
 
-@app.route('/details')
-def details():
-
-    return render_template("react_results.html")
-
-
 @app.route('/results.json', methods=['POST'])
 def cat_results_react():
     """Based on user search, display cats - get animals endpoint"""
@@ -28,6 +22,16 @@ def cat_results_react():
     cats = list(cats.values())
 
     return jsonify(cats)
+
+
+@app.route('/shelter.json', methods=['POST'])
+def tubbo_location():
+    """Returns shelter information for selected cat from results"""
+    shelter_id = request.form.get('shelter_id')
+    shelter = petfinder.shelter_data_map(shelter_id)
+    shelter = list(shelter.values())
+
+    return jsonify(shelter)
 
 
 @app.route('/')

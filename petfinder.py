@@ -3,6 +3,7 @@ import os
 from pprint import pformat
 from flask import request
 import json
+import fake_chonks
 
 #note: . secrets.sh everytime you open the terminal
 
@@ -32,9 +33,9 @@ def search_petfinder():
     miles = int(request.form.get('miles', '25'))
     size = request.form.get('thickness', '')
     color = request.form.get('color', '')
-    
+
     payload = {'type': 'Cat',
-                   'limit': 25, 
+                   'limit': 100, 
                    'location': location_search,
                    'color': color,
                    'distance': miles}
@@ -56,24 +57,45 @@ def search_data_map():
     """Mapping function to extract relevant information from search_petfinder"""
     
     fatty_dict = {}
-    cats = search_petfinder() 
-    for cat in cats['animals']:
-        if cat['photos'] != []:
-            fatty_dict[cat['id']] = {
-                            'cat_id': cat['id'],
-                            'name': cat['name'], 
-                            'gender': cat['gender'],
-                            'breed': cat['breeds']['primary'],
-                            'shelter_id': cat['organization_id'], 
-                            'photo_url': {'medium': cat['photos'][0]['medium'], 
-                                          'large': cat['photos'][0]['large']},
-                            'coat_len': cat['coat'],
-                            'color': cat['colors']['primary'],
-                            'extra_love': cat['attributes']['special_needs'],
-                            'environment': {'kids': cat['environment']['children'],
-                                            'dogs': cat['environment']['dogs'],
-                                            'cats': cat['environment']['cats']}
-                            }
+    cats = search_petfinder()
+    location_search = request.form.get('search')
+
+    if location_search == 'San Francisco, CA':
+        for cat in open('test.txt'):
+            cat = cat.rstrip()
+            cat = cat.split('|')
+            fatty_dict[cat[0]] = {'cat_id': cat[0],
+                            'name': cat[1],
+                            'gender': cat[2],
+                            'breed': cat[3],
+                            'shelter_id': cat[4],
+                            'photo_url': {'medium': cat[5],
+                                          'large': ''},
+                            'coat_len': cat[6],
+                            'color': cat[7],
+                            'extra_love': cat[8],
+                            'environment': {'kids': cat[9],
+                                            'dogs': cat[10],
+                                            'cats': cat[11]}}
+
+    else:
+        for cat in cats['animals']:
+            if cat['photos'] != []:
+                fatty_dict[cat['id']] = {
+                                'cat_id': cat['id'],
+                                'name': cat['name'], 
+                                'gender': cat['gender'],
+                                'breed': cat['breeds']['primary'],
+                                'shelter_id': cat['organization_id'], 
+                                'photo_url': {'medium': cat['photos'][0]['medium'], 
+                                              'large': cat['photos'][0]['large']},
+                                'coat_len': cat['coat'],
+                                'color': cat['colors']['primary'],
+                                'extra_love': cat['attributes']['special_needs'],
+                                'environment': {'kids': cat['environment']['children'],
+                                                'dogs': cat['environment']['dogs'],
+                                                'cats': cat['environment']['cats']}
+                                }
 
     return fatty_dict
 
@@ -95,6 +117,7 @@ def shelter_info(shelter_id):
 
 def shelter_data_map(shelter_id):
     """Mapping function to extract relevant information from shelter_info"""
+    
 
     shelter_details = {}
     shelter = shelter_info(shelter_id)
