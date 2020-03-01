@@ -1,18 +1,3 @@
-// class Test extends React.Component {
-    
-//     constructor() {
-//         super();
-
-//     }
-//     render() {
-//         const hello = 'hi'
-//         return (
-//             <div>{hello}</div>
-//             )
-//     }
-// }
-
-
 class Search extends React.Component {    
   constructor() {
     super();
@@ -56,8 +41,7 @@ class Search extends React.Component {
   }
 
   render() {
-    let cats = this.state.catResults
-    console.log('this is my results', cats)
+
     return (
       <div>
         <form>
@@ -92,15 +76,11 @@ class Search extends React.Component {
           </div>
           <button onClick={this.handleSubmit}>Submit</button>
         </form>
-
         <div id="response-all-cats">
-        {/* connecting to the tubbocontainer class - making an instance - passing
-         results from api req as a prop. cats is the prop ---> this.props.cats*/}
           <TubboContainer
             cats={this.state.catResults}
           /> 
         </div>
-
       </div>
     );
   }
@@ -118,7 +98,6 @@ class TubboContainer extends React.Component {
     for (const cat of this.props.cats) {
       cats.push(<Cat 
                   key={cat.cat_id}
-                  catId={cat.cat_id}
                   name={cat.name}
                   photo={cat.photo_url.medium}
                   gender={cat.gender}
@@ -157,69 +136,104 @@ class Cat extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      tubboLocation: undefined,
+      shelterInfo: undefined,
       showComponent: false,
     };
-    this._onButtonClick = this._onButtonClick.bind(this);
+    this.onButtonClick = this.onButtonClick.bind(this);
   }
 
-  _onButtonClick() {
-
-// ReactDOM.render(
-//   <MoreDetails catId={this.props.catId}/>,
-//   document.getElementById('app')
-// );
+  onButtonClick() {
     let shelter = {'shelter_id': this.props.shelterId}
-    console.log(shelter)
     $.post('/shelter.json', shelter, (response) => { 
-      this.setState({tubboLocation: response, showComponent: true})
+      this.setState({shelterInfo: response, showComponent: true})
     });
-  }
+  }    
 
   render() {
     return (
       <div className="individ-cat">
-
-      <button onClick={this._onButtonClick}>
-        <img 
-          className="medium-image" 
-          src={this.props.photo} 
-          alt="HTML5"
-          style={{width: 350, height: 350}}
-         />
-        <p>{this.props.name}</p>
-      </button>
-      
-      <div>
-      {this.state.showComponent ?
-        <MoreDetails catId={this.props.catId}
-                     shelterId={this.props.shelterId}
-        /> :
-        null
-      }
-      </div> 
-      
+          <button onClick={this.onButtonClick}>
+            <img className="medium-image" src={this.props.photo}/>
+            <p>{this.props.name}</p>
+          </button>
+        <div id="cat-more-details">
+          {this.state.showComponent ?
+            <MoreDetails name={this.props.name}
+                         breed={this.props.breed}
+                         gender={this.props.gender}
+                         color={this.props.color}
+                         coatLen={this.props.coatLen}
+            /> :
+            null
+          }        
+        </div> 
+        <div id="shelter-response">
+          {this.state.showComponent ?
+            <Shelter details={this.state.shelterInfo}
+            /> :
+            null
+          }
+        </div>               
       </div>
     );
   }
 }
 
 
-
-class MoreDetails extends React.Component {
+class Shelter extends React.Component {
   constructor(props) {
     super(props);
+    this.shelterInfo = this.shelterInfo.bind(this);
+  }
+  
+  shelterInfo() {
+    const tubboLocation = []
+    for (const info of this.props.details) {
+      tubboLocation.push(<MoreDetails 
+                          key={info.shelter_id}
+                          email={info.email}
+                        />
+      );
+    }
+    return tubboLocation
   }
 
   render() {
-    return (
-      <div>{this.props.catId}</div>
-    )
+    if (this.props.details) {
+      return (
+         <div>
+           {this.shelterInfo()}
+         </div>
+      );
+    }
+    else {
+      return (
+        <div></div>
+      )
+    }
   }
 }
 
 
+class MoreDetails extends React.Component {
 
+  render() {
+      return (
+        <div>
+          <p>{this.props.name}</p>
+          <p>{this.props.breed}</p>
+          <p>{this.props.email}</p>
+        </div>
+      );
+    }
+  }
+
+
+
+// ReactDOM.render(
+//   <MoreDetails catId={this.props.catId}/>,
+//   document.getElementById('app')
+// );
 
 ReactDOM.render(
   <Search />,

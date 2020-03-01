@@ -101,7 +101,6 @@ def search_data_map():
 
 
 def shelter_info(shelter_id):
-    #shelter_id = 'CA560'
     """Return API response for shelter information using the organization ID 
     associated to the cat from search_petfinder, get organization endpoint"""
     
@@ -117,7 +116,6 @@ def shelter_info(shelter_id):
 
 def shelter_data_map(shelter_id):
     """Mapping function to extract relevant information from shelter_info"""
-    
 
     shelter_details = {}
     shelter = shelter_info(shelter_id)
@@ -140,7 +138,6 @@ def shelter_data_map(shelter_id):
 
 
 def cat_info(cat_id):
-    #shelter_id = 'CA560'
     """Return API response for selected cat for more cat details"""
     
     token = get_token()
@@ -178,16 +175,4 @@ def cat_data_map(cat_id):
     return fatty_dict
 
 
-# demo show SF, if SF location is chosen then get images from the database and not the API
-##select random images but keep track of what's being pulled
-
-#use animal id (in the API) to store cats to favorites. 
-##this will be the foregin key in the favorites tables which is the primary key of the cats table
-
-#you can use sessions to check if someone is logged in (example)
-
-
-#data - dict
-#data[animals] - type is list - list of all the animals in the response
-#data[animals][0] - type is dict - dict of all the details of the animal at index 0
 

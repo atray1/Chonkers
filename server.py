@@ -14,6 +14,7 @@ def react():
 
     return render_template('search_react.html')
 
+
 @app.route('/results.json', methods=['POST'])
 def cat_results_react():
     """Based on user search, display cats - get animals endpoint"""
@@ -53,13 +54,6 @@ def cat_results():
 
     return render_template('search_results.html',
                             cats=cats)
-
-
-    #React thoughts/notes
-    # your going to return cats as a json and react will hit this endpoint
-    # to get the returned cats response data
-    # react component - divs for each cat
-    # react props - unique information for each cat
 
 
 @app.route('/more-details/<cat_id>/<shelter_id>')
