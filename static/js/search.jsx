@@ -5,14 +5,16 @@ class Search extends React.Component {
       search: undefined,
       miles: 10, 
       thickness: 'all',
-      catResults: undefined
+      catResults: undefined,
+      colors: undefined,
+      colArr: [],
     };
     this.handleInput = this.handleInput.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleInput(e) {
-    this.setState({[e.target.name]: e.target.value})
+    this.setState({[e.target.name]: e.target.value});
     
     let element = document.getElementById('miles');
     if (e.target.name === 'miles' && e.target.value === 'other') {
@@ -29,17 +31,33 @@ class Search extends React.Component {
     let search = this.state.search;
     let miles = this.state.miles;
     let thickness = this.state.miles;
-    let search_data = {
-      'search': this.state.search,
-      'miles': this.state.miles,
-      'thickness': this.state.thickness
-    };
-    
+    let search_data = {'search': this.state.search,
+                       'miles': this.state.miles,
+                       'thickness': this.state.thickness}; 
+    //loading is true show dancing fat cat
     $.post('/results.json', search_data, (response) => { 
-      this.setState({catResults: response})
+      this.setState({catResults: response} //, () => {
+        // loading = false
+      );
+      
+      if (this.state.catResults === response) {
+        let catColors = new Set();
+        // this.catColors.values()
+        Object.entries(this.state.catResults).forEach(([key, value]) => {
+          if (value.color != null) {
+              catColors.add(value.color);
+          }
+        });
+       this.setState({colors: catColors});
+      }
+      const arr = [];
+      for (let c of this.state.colors) {
+        arr.push(c)
+      }
+      this.setState({colArr: arr})
     });
   }
-
+ 
   render() {
 
     return (
@@ -79,6 +97,7 @@ class Search extends React.Component {
         <div id="response-all-cats">
           <TubboContainer
             cats={this.state.catResults}
+            arr={this.state.colArr}
           /> 
         </div>
       </div>
@@ -90,11 +109,21 @@ class Search extends React.Component {
 class TubboContainer extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {cats: props.cats}
     this.makeCats = this.makeCats.bind(this);
   }
 
+  // this.state.cats // all cats
+
+ // filterCats
+     // updates the this.state.cats
+
+ // pass filterCats.bind(this) to Filters and call it in Filters when a new filter is selected
+
   makeCats() {
-    const cats = []
+    const cats = [];
+    const colors = [];
+    const both = [cats, colors]
     for (const cat of this.props.cats) {
       cats.push(<Cat 
                   key={cat.cat_id}
@@ -115,19 +144,40 @@ class TubboContainer extends React.Component {
     return cats
   }
 
+
   render() {
     if (this.props.cats) {
       return (
-        <div id="prop-all-cats">
-          {this.makeCats()}          
+        <div>
+          <div id="prop-all-cats">
+            {this.makeCats()}       
+          </div>
+          <div id="cat-filters">
+            <Filters 
+              arr={this.props.arr}
+            />
+          </div>
         </div>
       );
     } 
     else {
       return (
-        <div> Please enter a search </div>
+        <div></div>
       );
     }
+  }
+}
+
+
+class Filters extends React.Component {
+  render() {
+    return (
+        <div>
+          <select>
+            {this.props.arr.map((x,y) => <option key={y}>{x}</option>)}
+          </select>
+        </div>
+      )
   }
 }
 
@@ -143,16 +193,18 @@ class Cat extends React.Component {
   }
 
   onButtonClick() {
-    let shelter = {'shelter_id': this.props.shelterId}
+    let shelter = {'shelter_id': this.props.shelterId};
     $.post('/shelter.json', shelter, (response) => { 
       this.setState({shelterInfo: response, showComponent: true})
     });
-  }    
+  }
+
 
   render() {
+
     return (
       <div className="individ-cat">
-          <button onClick={this.onButtonClick}>
+         <button onClick={this.onButtonClick}>
             <img className="medium-image" src={this.props.photo}/>
             <p>{this.props.name}</p>
           </button>
