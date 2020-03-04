@@ -57,6 +57,10 @@ class Search extends React.Component {
       this.setState({colArr: arr})
     });
   }
+
+  filterCats(e) {
+    console.log(e.target.value)
+  }
  
   render() {
 
@@ -98,6 +102,7 @@ class Search extends React.Component {
           <TubboContainer
             cats={this.state.catResults}
             arr={this.state.colArr}
+            filterFunction={this.filterCats.bind(this)}
           /> 
         </div>
       </div>
@@ -155,6 +160,7 @@ class TubboContainer extends React.Component {
           <div id="cat-filters">
             <Filters 
               arr={this.props.arr}
+              filterFunction={this.props.filterFunction}
             />
           </div>
         </div>
@@ -173,7 +179,7 @@ class Filters extends React.Component {
   render() {
     return (
         <div>
-          <select>
+          <select onChange={this.props.filterFunction}>
             {this.props.arr.map((x,y) => <option key={y}>{x}</option>)}
           </select>
         </div>
