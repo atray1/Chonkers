@@ -8,6 +8,7 @@ class Search extends React.Component {
       catResults: undefined,
       colors: undefined,
       colArr: [],
+      colorFilter: undefined
     };
     this.handleInput = this.handleInput.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -57,9 +58,28 @@ class Search extends React.Component {
       this.setState({colArr: arr})
     });
   }
+
+  filterCats(e) {
+    const prevCats = this.state.catResults;
+    const colorFilt = e.target.value;
+    const newCats = []
+    for (const newCat of prevCats) {
+      if (newCat.color === colorFilt) {
+        newCats.push(newCat)
+      } 
+    }
+    this.setState({catResults: newCats})
+    // let newCats = prevCats.filter(col => prevCats.color === colorFilt)
+    // console.log(newCats)
+
+    // let w = e.target.value
+    // let newCats = [this.state.catResults[0]];
+    // this.setState({catResults: newCats});
+    // console.log(this.state.catResults)
+    // console.log(e.target.value)
+  }
  
   render() {
-
     return (
       <div>
         <form>
@@ -98,6 +118,7 @@ class Search extends React.Component {
           <TubboContainer
             cats={this.state.catResults}
             arr={this.state.colArr}
+            filterFunction={this.filterCats.bind(this)}
           /> 
         </div>
       </div>
@@ -109,7 +130,7 @@ class Search extends React.Component {
 class TubboContainer extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {cats: props.cats}
+    //this.state = {cats: props.cats}
     this.makeCats = this.makeCats.bind(this);
   }
 
@@ -155,6 +176,7 @@ class TubboContainer extends React.Component {
           <div id="cat-filters">
             <Filters 
               arr={this.props.arr}
+              filterFunction={this.props.filterFunction}
             />
           </div>
         </div>
@@ -173,7 +195,7 @@ class Filters extends React.Component {
   render() {
     return (
         <div>
-          <select>
+          <select name='colorFilter' onChange={this.props.filterFunction}>
             {this.props.arr.map((x,y) => <option key={y}>{x}</option>)}
           </select>
         </div>
