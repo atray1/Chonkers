@@ -6,7 +6,6 @@ class Search extends React.Component {
       miles: 10, 
       thickness: 'all',
       catResults: undefined,
-      colors: undefined,
       colArr: [],
       colorFilter: undefined
     };
@@ -31,7 +30,7 @@ class Search extends React.Component {
 
     let search = this.state.search;
     let miles = this.state.miles;
-    let thickness = this.state.miles;
+    let thickness = this.state.thickness;
     let search_data = {'search': this.state.search,
                        'miles': this.state.miles,
                        'thickness': this.state.thickness}; 
@@ -43,40 +42,18 @@ class Search extends React.Component {
       
       if (this.state.catResults === response) {
         let catColors = new Set();
-        // this.catColors.values()
         Object.entries(this.state.catResults).forEach(([key, value]) => {
           if (value.color != null) {
               catColors.add(value.color);
           }
         });
-       this.setState({colors: catColors});
+          const arr = [];
+          for (let c of catColors) {
+            arr.push(c)
+          }
+      this.setState({colArr: arr}, () => {console.log(this.state.colArr)})
       }
-      const arr = [];
-      for (let c of this.state.colors) {
-        arr.push(c)
-      }
-      this.setState({colArr: arr})
     });
-  }
-
-  filterCats(e) {
-    const prevCats = this.state.catResults;
-    const colorFilt = e.target.value;
-    const newCats = []
-    for (const newCat of prevCats) {
-      if (newCat.color === colorFilt) {
-        newCats.push(newCat)
-      } 
-    }
-    this.setState({catResults: newCats})
-    // let newCats = prevCats.filter(col => prevCats.color === colorFilt)
-    // console.log(newCats)
-
-    // let w = e.target.value
-    // let newCats = [this.state.catResults[0]];
-    // this.setState({catResults: newCats});
-    // console.log(this.state.catResults)
-    // console.log(e.target.value)
   }
  
   render() {
@@ -118,7 +95,6 @@ class Search extends React.Component {
           <TubboContainer
             cats={this.state.catResults}
             arr={this.state.colArr}
-            filterFunction={this.filterCats.bind(this)}
           /> 
         </div>
       </div>
@@ -131,20 +107,18 @@ class TubboContainer extends React.Component {
   constructor(props) {
     super(props);
     //this.state = {cats: props.cats}
+    this.state = {fil: 'Color'}
     this.makeCats = this.makeCats.bind(this);
+    this.filterCats = this.filterCats.bind(this);
   }
 
-  // this.state.cats // all cats
-
- // filterCats
-     // updates the this.state.cats
-
- // pass filterCats.bind(this) to Filters and call it in Filters when a new filter is selected
+  filterCats(e) {
+    const colorFilt = e.target.value;
+    this.setState({fil: colorFilt})
+  }
 
   makeCats() {
     const cats = [];
-    const colors = [];
-    const both = [cats, colors]
     for (const cat of this.props.cats) {
       cats.push(<Cat 
                   key={cat.cat_id}
@@ -162,8 +136,16 @@ class TubboContainer extends React.Component {
                 />
                );
     }
-    return cats
-  }
+    if (this.state.fil !== 'Color') {
+       let filteredCats = cats.filter(obj => {
+         return obj.props.color === this.state.fil
+     });
+      return filteredCats
+    }
+    else {
+      return cats
+    }
+}
 
 
   render() {
@@ -176,12 +158,18 @@ class TubboContainer extends React.Component {
           <div id="cat-filters">
             <Filters 
               arr={this.props.arr}
-              filterFunction={this.props.filterFunction}
+              filterFunction={this.filterCats}
             />
           </div>
         </div>
       );
     } 
+    else if (this.state.fil !== 'Color') {
+      <div>
+        {this.filterCats()}
+      </div>
+    }
+
     else {
       return (
         <div></div>
@@ -192,11 +180,18 @@ class TubboContainer extends React.Component {
 
 
 class Filters extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      colorFilter: 'Color'
+    };
+  }
   render() {
     return (
         <div>
           <select name='colorFilter' onChange={this.props.filterFunction}>
             {this.props.arr.map((x,y) => <option key={y}>{x}</option>)}
+            <option value='Color'>Color</option>
           </select>
         </div>
       )
@@ -290,7 +285,7 @@ class Shelter extends React.Component {
 
 
 class MoreDetails extends React.Component {
-
+  
   render() {
       return (
         <div>
@@ -299,15 +294,11 @@ class MoreDetails extends React.Component {
           <p>{this.props.email}</p>
         </div>
       );
-    }
   }
+}
 
 
 
-// ReactDOM.render(
-//   <MoreDetails catId={this.props.catId}/>,
-//   document.getElementById('app')
-// );
 
 ReactDOM.render(
   <Search />,

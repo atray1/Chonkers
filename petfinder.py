@@ -35,7 +35,7 @@ def search_petfinder():
     color = request.form.get('color', '')
 
     payload = {'type': 'Cat',
-                   'limit': 100, 
+                   'limit': 5, 
                    'location': location_search,
                    'color': color,
                    'distance': miles}
