@@ -5,7 +5,6 @@ from flask import request
 import json
 import fake_chonks
 
-#note: . secrets.sh everytime you open the terminal
 
 API_KEY = os.environ['PETFINDER_KEY']
 SECRET_KEY = os.environ['PETFINDER_SECRET']
@@ -33,19 +32,22 @@ def search_petfinder():
     miles = int(request.form.get('miles', '25'))
     size = request.form.get('thickness', '')
     color = request.form.get('color', '')
+    breed = request.form.get('breed', '')
 
     payload = {'type': 'Cat',
-                   'limit': 5, 
+                   'limit': 25, 
                    'location': location_search,
                    'color': color,
-                   'distance': miles}
+                   'distance': miles,
+                   'breed': breed
+                   }
 
     if size == 'large':
         payload['size'] = 'large'
         response = requests.get(url, headers=headers, params=payload)
         data = response.json() 
 
-    elif size == 'xlarge' or 'all':
+    else:
         payload['size'] = 'xlarge'
         response = requests.get(url, headers=headers, params=payload)
         data = response.json() 

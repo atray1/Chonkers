@@ -7,7 +7,7 @@ class Search extends React.Component {
       thickness: 'all',
       catResults: undefined,
       colArr: [],
-      colorFilter: undefined
+      catBreeds: ['Breed', 'Abyssinian'],
     };
     this.handleInput = this.handleInput.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -31,9 +31,9 @@ class Search extends React.Component {
     let search = this.state.search;
     let miles = this.state.miles;
     let thickness = this.state.thickness;
-    let search_data = {'search': this.state.search,
-                       'miles': this.state.miles,
-                       'thickness': this.state.thickness}; 
+    let search_data = {search: this.state.search,
+                       miles: this.state.miles,
+                       thickness: this.state.thickness}; 
     //loading is true show dancing fat cat
     $.post('/results.json', search_data, (response) => { 
       this.setState({catResults: response} //, () => {
@@ -42,21 +42,45 @@ class Search extends React.Component {
       
       if (this.state.catResults === response) {
         let catColors = new Set();
+        let breeds = new Set();
         Object.entries(this.state.catResults).forEach(([key, value]) => {
           if (value.color != null) {
               catColors.add(value.color);
           }
+          if (value.breed != null) {
+            breeds.add(value.breed)
+          }
         });
-          const arr = [];
+          const arr = ['Color', ];
           for (let c of catColors) {
             arr.push(c)
           }
-      this.setState({colArr: arr}, () => {console.log(this.state.colArr)})
+          const breedArr = ['Breed', ];
+          for (const breed of breeds) {
+            breedArr.push(breed)
+          }
+      this.setState({colArr: arr})
       }
+    });
+  }
+
+  newReq(e) {
+    const{name, value} = e.target
+    let search = this.state.search;
+    let miles = this.state.miles;
+    let thickness = this.state.thickness;
+    let search_data = {search: this.state.search,
+                       miles: this.state.miles,
+                       thickness: this.state.thickness,
+                       [e.target.name]: e.target.value};
+
+    $.post('/results.json', search_data, (response) => { 
+      this.setState({catResults: response})
     });
   }
  
   render() {
+
     return (
       <div>
         <form>
@@ -95,6 +119,8 @@ class Search extends React.Component {
           <TubboContainer
             cats={this.state.catResults}
             arr={this.state.colArr}
+            breedArr={this.state.catBreeds}
+            newCats={this.newReq.bind(this)}
           /> 
         </div>
       </div>
@@ -106,15 +132,7 @@ class Search extends React.Component {
 class TubboContainer extends React.Component {
   constructor(props) {
     super(props);
-    //this.state = {cats: props.cats}
-    this.state = {fil: 'Color'}
     this.makeCats = this.makeCats.bind(this);
-    this.filterCats = this.filterCats.bind(this);
-  }
-
-  filterCats(e) {
-    const colorFilt = e.target.value;
-    this.setState({fil: colorFilt})
   }
 
   makeCats() {
@@ -136,39 +154,28 @@ class TubboContainer extends React.Component {
                 />
                );
     }
-    if (this.state.fil !== 'Color') {
-       let filteredCats = cats.filter(obj => {
-         return obj.props.color === this.state.fil
-     });
-      return filteredCats
-    }
-    else {
-      return cats
-    }
-}
-
+    return cats
+  }
 
   render() {
+
     if (this.props.cats) {
       return (
         <div>
           <div id="prop-all-cats">
             {this.makeCats()}       
           </div>
-          <div id="cat-filters">
-            <Filters 
-              arr={this.props.arr}
-              filterFunction={this.filterCats}
-            />
-          </div>
+         <div>
+          <select name='color' defaultValue='Color' onChange={this.props.newCats}>
+            {this.props.arr.map((x,y) => <option key={y}>{x}</option>)}
+          </select>
+            <select name='breed' defaultValue='Breed' onChange={this.props.newCats}>
+             {this.props.breedArr.map((x,y) => <option key={y}>{x}</option>)}        
+          </select>
+         </div>
         </div>
       );
     } 
-    else if (this.state.fil !== 'Color') {
-      <div>
-        {this.filterCats()}
-      </div>
-    }
 
     else {
       return (
@@ -178,25 +185,6 @@ class TubboContainer extends React.Component {
   }
 }
 
-
-class Filters extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      colorFilter: 'Color'
-    };
-  }
-  render() {
-    return (
-        <div>
-          <select name='colorFilter' onChange={this.props.filterFunction}>
-            {this.props.arr.map((x,y) => <option key={y}>{x}</option>)}
-            <option value='Color'>Color</option>
-          </select>
-        </div>
-      )
-  }
-}
 
 
 class Cat extends React.Component {
@@ -296,7 +284,6 @@ class MoreDetails extends React.Component {
       );
   }
 }
-
 
 
 
