@@ -18,11 +18,27 @@ def react():
 @app.route('/results.json', methods=['POST'])
 def cat_results_react():
     """Based on user search, display cats - get animals endpoint"""
-
+    
     cats = petfinder.search_data_map()
     cats = list(cats.values())
 
     return jsonify(cats)
+
+
+@app.route('/breeds.json')
+def get_cat_breeds():
+    """returns possible cat breed parameters"""
+    
+    breeds = petfinder.get_breeds()
+    return jsonify(breeds)
+
+
+@app.route('/colors.json')
+def get_coat_colors():
+    """returns possible cat coat colors"""
+
+    colors = petfinder.get_colors()
+    return jsonify(colors)
 
 
 @app.route('/shelter.json', methods=['POST'])

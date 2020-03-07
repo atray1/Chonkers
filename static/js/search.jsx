@@ -7,10 +7,15 @@ class Search extends React.Component {
       thickness: 'all',
       catResults: undefined,
       colArr: [],
-      catBreeds: ['Breed', 'Abyssinian'],
+      catBreeds: [],
     };
     this.handleInput = this.handleInput.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  componentDidMount() {
+    $.get('/breeds.json', (response) => {this.setState({catBreeds: response.breeds})});
+    $.get('/colors.json', (response) => {this.setState({colArr: response.colors})});
   }
 
   handleInput(e) {
@@ -36,36 +41,13 @@ class Search extends React.Component {
                        thickness: this.state.thickness}; 
     //loading is true show dancing fat cat
     $.post('/results.json', search_data, (response) => { 
-      this.setState({catResults: response} //, () => {
+      this.setState({catResults: response}); //, () => {
         // loading = false
-      );
-      
-      if (this.state.catResults === response) {
-        let catColors = new Set();
-        let breeds = new Set();
-        Object.entries(this.state.catResults).forEach(([key, value]) => {
-          if (value.color != null) {
-              catColors.add(value.color);
-          }
-          if (value.breed != null) {
-            breeds.add(value.breed)
-          }
-        });
-          const arr = ['Color', ];
-          for (let c of catColors) {
-            arr.push(c)
-          }
-          const breedArr = ['Breed', ];
-          for (const breed of breeds) {
-            breedArr.push(breed)
-          }
-      this.setState({colArr: arr})
-      }
     });
   }
 
   newReq(e) {
-    const{name, value} = e.target
+    const{name, value} = e.target;
     let search = this.state.search;
     let miles = this.state.miles;
     let thickness = this.state.thickness;
@@ -74,6 +56,7 @@ class Search extends React.Component {
                        thickness: this.state.thickness,
                        [e.target.name]: e.target.value};
 
+     console.log(search_data)
     $.post('/results.json', search_data, (response) => { 
       this.setState({catResults: response})
     });
@@ -165,13 +148,35 @@ class TubboContainer extends React.Component {
           <div id="prop-all-cats">
             {this.makeCats()}       
           </div>
-         <div>
-          <select name='color' defaultValue='Color' onChange={this.props.newCats}>
-            {this.props.arr.map((x,y) => <option key={y}>{x}</option>)}
-          </select>
-            <select name='breed' defaultValue='Breed' onChange={this.props.newCats}>
-             {this.props.breedArr.map((x,y) => <option key={y}>{x}</option>)}        
-          </select>
+        <div>
+          <label>
+          Color
+            <select name='color' onChange={this.props.newCats}>
+              {this.props.arr.map((x,y) => <option key={y}>{x}</option>)}
+            </select>
+          </label>
+          <label>
+          Breed
+            <select name='breed' onChange={this.props.newCats}>
+               {this.props.breedArr.map((x,y) => <option key={y}>{x}</option>)}        
+            </select>
+          </label>
+          <label>
+          Coat Length
+            <select name='coat' onChange={this.props.newCats}>
+              <option value='Long'>Long</option>
+              <option value='Medium'>Medium</option>
+              <option value='Short'>Short</option>
+              <option value='Hairless'>Hairless</option>
+            </select>
+          </label>
+          <label>
+          Gender
+            <select name='gender' onChange={this.props.newCats}>
+              <option value='Male'>Male</option>
+              <option value='Female'>Female</option>
+            </select> 
+          </label>        
          </div>
         </div>
       );
@@ -184,7 +189,6 @@ class TubboContainer extends React.Component {
     }
   }
 }
-
 
 
 class Cat extends React.Component {
@@ -203,7 +207,6 @@ class Cat extends React.Component {
       this.setState({shelterInfo: response, showComponent: true})
     });
   }
-
 
   render() {
 
@@ -266,7 +269,7 @@ class Shelter extends React.Component {
     else {
       return (
         <div></div>
-      )
+      );
     }
   }
 }

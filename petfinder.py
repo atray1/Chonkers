@@ -23,8 +23,43 @@ def get_token():
     return token
 
 
+def get_breeds():
+    """returns possible cat breed parameters"""
+    
+    token = get_token()
+    atype = 'cat'
+    url = 'https://api.petfinder.com/v2/types/'+ atype +'/breeds'
+    headers = {'Authorization': token}
+    payload = {'type': atype}
+    response = requests.get(url, headers=headers, params=payload)
+    data = response.json()
+    breeds = {}
+    breeds['breeds'] = []
+    for breed in data['breeds']:
+        breeds['breeds'].append(breed['name'])
+
+    return breeds
+
+
+def get_colors():
+    """returns possible coat colors"""
+
+    token = get_token()
+    url = 'https://api.petfinder.com/v2/types'
+    headers = {'Authorization': token}
+    response = requests.get(url, headers=headers)
+    data = response.json()
+    colors = {}
+    for color in data['types']:
+        if color['name'] == 'Cat':
+            colors['colors'] = color['colors']
+
+    return colors
+
+
 def search_petfinder():
     """Return API response based on user search input, get animals endpoint"""
+    
     token = get_token()
     url = 'https://api.petfinder.com/v2/animals'
     headers = {'Authorization': token}
@@ -33,13 +68,17 @@ def search_petfinder():
     size = request.form.get('thickness', '')
     color = request.form.get('color', '')
     breed = request.form.get('breed', '')
+    coat = request.form.get('coat', '')
+    gender = request.form.get('gender', '')
 
     payload = {'type': 'Cat',
                    'limit': 25, 
                    'location': location_search,
                    'color': color,
                    'distance': miles,
-                   'breed': breed
+                   'breed': breed,
+                   'coat': coat,
+                   'gender': gender
                    }
 
     if size == 'large':
@@ -138,43 +177,6 @@ def shelter_data_map(shelter_id):
 
     return shelter_details
 
-
-def cat_info(cat_id):
-    """Return API response for selected cat for more cat details"""
-    
-    token = get_token()
-    url = 'https://api.petfinder.com/v2/animals/' + cat_id
-    headers = {'Authorization': token}
-    payload = {'id': cat_id}
-    response = requests.get(url, headers=headers, params=payload)
-    data = response.json()
-    return data
-
-
-def cat_data_map(cat_id):
-    """Mapping function to extract relevant details for selected cat"""
-   
-    fatty_dict = {}
-    fatty = cat_info(cat_id)
-    cat = fatty['animal']
-
-    fatty_dict[cat['id']] = {
-                    'cat_id': cat['id'],
-                    'name': cat['name'], 
-                    'gender': cat['gender'],
-                    'breed': cat['breeds']['primary'],
-                    'shelter_id': cat['organization_id'], 
-                    'photo_url': {'medium': cat['photos'][0]['medium'], 
-                                  'large': cat['photos'][0]['large']},
-                    'coat_len': cat['coat'],
-                    'color': cat['colors']['primary'],
-                    'extra_love': cat['attributes']['special_needs'],
-                    'environment': {'kids': cat['environment']['children'],
-                                    'dogs': cat['environment']['dogs'],
-                                    'cats': cat['environment']['cats']}
-                        }
-
-    return fatty_dict
 
 
 
