@@ -78,8 +78,7 @@ def search_petfinder():
                    'distance': miles,
                    'breed': breed,
                    'coat': coat,
-                   'gender': gender
-                   }
+                   'gender': gender}
 
     if size == 'large':
         payload['size'] = 'large'
@@ -168,7 +167,7 @@ def shelter_data_map(shelter_id):
                             'phone': org['phone'],
                             'email': org['email'],
                             'url': org['url'],
-                            'loaction': {'address': org['address']['address1'],
+                            'location': {'address': org['address']['address1'],
                                          'city': org['address']['city'],
                                          'state': org['address']['state'],
                                          'zipcode': org['address']['postcode'],

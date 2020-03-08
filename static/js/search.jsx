@@ -1,3 +1,13 @@
+// function initMap() {
+//   const map = new google.maps.Map(document.getElementById('map'), {
+//     zoom: 3,
+//     center: {
+//       lat: 37.601773,
+//       lng: -122.202870
+//     },
+//   });
+// }
+
 class Search extends React.Component {    
   constructor() {
     super();
@@ -55,8 +65,6 @@ class Search extends React.Component {
                        miles: this.state.miles,
                        thickness: this.state.thickness,
                        [e.target.name]: e.target.value};
-
-     console.log(search_data)
     $.post('/results.json', search_data, (response) => { 
       this.setState({catResults: response})
     });
@@ -194,18 +202,33 @@ class TubboContainer extends React.Component {
 class Cat extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      shelterInfo: undefined,
-      showComponent: false,
-    };
+    this.state = {shelterInfo: undefined};
     this.onButtonClick = this.onButtonClick.bind(this);
+    this.shelterInfo = this.shelterInfo.bind(this);
+  }
+
+  shelterInfo(response) {
+    const tubboLocation = []
+    let res = response[0]
+    tubboLocation.push(<MoreDetails 
+                        key={res.shelter_id}
+                        shelterName={res.name}
+                        phone={res.phone}
+                        url={res.url}
+                        email={res.email}
+                        address={res.location.address}
+                        city={res.location.city}
+                        state={res.location.state}
+                        zipcode={res.location.zipcode}
+                      />
+        );
+    this.setState({shelterInfo: tubboLocation});
   }
 
   onButtonClick() {
     let shelter = {'shelter_id': this.props.shelterId};
-    $.post('/shelter.json', shelter, (response) => { 
-      this.setState({shelterInfo: response, showComponent: true})
-    });
+    $.post('/shelter.json', shelter, (response) => {this.shelterInfo(response)});
+
   }
 
   render() {
@@ -217,22 +240,16 @@ class Cat extends React.Component {
             <p>{this.props.name}</p>
           </button>
         <div id="cat-more-details">
-          {this.state.showComponent ?
+          {this.state.shelterInfo ?
             <MoreDetails name={this.props.name}
                          breed={this.props.breed}
                          gender={this.props.gender}
                          color={this.props.color}
                          coatLen={this.props.coatLen}
+                         shelter={this.state.shelterInfo}
             /> :
             null
           }        
-        </div> 
-        <div id="shelter-response">
-          {this.state.showComponent ?
-            <Shelter details={this.state.shelterInfo}
-            /> :
-            null
-          }
         </div>               
       </div>
     );
@@ -240,53 +257,45 @@ class Cat extends React.Component {
 }
 
 
-class Shelter extends React.Component {
-  constructor(props) {
-    super(props);
-    this.shelterInfo = this.shelterInfo.bind(this);
-  }
-  
-  shelterInfo() {
-    const tubboLocation = []
-    for (const info of this.props.details) {
-      tubboLocation.push(<MoreDetails 
-                          key={info.shelter_id}
-                          email={info.email}
-                        />
-      );
-    }
-    return tubboLocation
-  }
-
-  render() {
-    if (this.props.details) {
-      return (
-         <div>
-           {this.shelterInfo()}
-         </div>
-      );
-    }
-    else {
-      return (
-        <div></div>
-      );
-    }
-  }
-}
-
-
 class MoreDetails extends React.Component {
-  
+  constructor(props) {
+    super(props)
+    this.googleMapRef = React.createRef()
+  }
+
+  componentDidMount() {
+    const googleMapScript = document.createElement("script")
+    googleMapScript.src = 'https://maps.googleapis.com/maps/api/js?key=&libraries=places'
+    window.document.body.appendChild(googleMapScript)
+    googleMapScript.addEventListener('load', () => {
+      this.moodyMap = this.createGoogleMap() 
+     });
+  }
+
+  createGoogleMap = () => {
+    return new window.google.maps.Map(this.googleMapRef.current, {
+      zoom: 4,
+      center: {
+        lat: 26.8206,
+        lng: 30.8025,
+      },
+      disableDefaultUI: true,
+    })
+  }
+
   render() {
-      return (
+    console.log('shelter prop',this.props.shelter)
+    return (
         <div>
           <p>{this.props.name}</p>
           <p>{this.props.breed}</p>
           <p>{this.props.email}</p>
+          <div id='map' ref={this.googleMapRef} style={{width: 400, height: 300}}></div>
         </div>
       );
   }
 }
+
 
 
 
