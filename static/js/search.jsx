@@ -1,20 +1,12 @@
-// function initMap() {
-//   const map = new google.maps.Map(document.getElementById('map'), {
-//     zoom: 3,
-//     center: {
-//       lat: 37.601773,
-//       lng: -122.202870
-//     },
-//   });
-// }
+//show results based on distance 
 
 class Search extends React.Component {    
   constructor() {
     super();
     this.state = { 
       search: undefined,
-      miles: 10, 
-      thickness: 'all',
+      miles: 100, 
+      thickness: 'large,xlarge',
       catResults: undefined,
       colArr: [],
       catBreeds: [],
@@ -31,30 +23,34 @@ class Search extends React.Component {
   handleInput(e) {
     this.setState({[e.target.name]: e.target.value});
     
-    let element = document.getElementById('miles');
-    if (e.target.name === 'miles' && e.target.value === 'other') {
-        element.style.display = 'block';
-    }
-    else {
-        element.style.display = 'none';
+    if (this.state.catResults !== undefined) {
+      let element = document.getElementById('miles');
+      if (e.target.name === 'miles' && e.target.value === 'other') {
+          element.style.display = 'block'
+      }
+      else {
+          element.style.display = 'none'
+      }
+     this.handleSubmit(e)
     }
   }
 
   handleSubmit(e) {
-    e.preventDefault();
-
-    let search = this.state.search;
-    let miles = this.state.miles;
-    let thickness = this.state.thickness;
-    let search_data = {search: this.state.search,
-                       miles: this.state.miles,
-                       thickness: this.state.thickness}; 
+    if (this.state.catResults === undefined) {
+      e.preventDefault();
+    }
+      let search = this.state.search;
+      let miles = this.state.miles;
+      let thickness = this.state.thickness;
+      let search_data = {search: this.state.search,
+                         miles: this.state.miles,
+                         thickness: this.state.thickness}; 
     //loading is true show dancing fat cat
-    $.post('/results.json', search_data, (response) => { 
-      this.setState({catResults: response}); //, () => {
-        // loading = false
-    });
-  }
+      $.post('/results.json', search_data, (response) => { 
+        this.setState({catResults: response}); //, () => {
+          // loading = false
+      });
+  }  
 
   newReq(e) {
     const{name, value} = e.target;
@@ -69,53 +65,68 @@ class Search extends React.Component {
       this.setState({catResults: response})
     });
   }
- 
-  render() {
 
-    return (
-      <div>
-        <form>
-          <div>
-            <label>
-              Search:
-                <input name='search' type='text' onChange={this.handleInput}/>
-            </label>
-          </div>
-          <div>
-          <label>
-          Distance:
-            <select name='miles' defaultValue={this.state.miles} onChange={this.handleInput}>
-              <option value='10'>10 Miles</option>
-              <option value='25'>25 Miles</option>
-              <option value='50'>50 Miles</option>
-              <option value='100'>100 Miles</option>
-              <option value='other'>Other</option>
-            </select>
-          </label>
-          <input name='miles' id='miles' type='text' style={{display: this.element ? 'block' : 'none'}}></input>
-          </div>
-          <div>
+
+  render() {
+    console.log(this.state.thickness)
+
+    if (this.state.catResults === undefined) {
+      return (
+        <div>
+          <form>
+            <div id='search'>
+              <label>
+                Search:
+                <input name='search' type='text' onChange={this.handleInput}></input>
+              </label>
+                <button onClick={this.handleSubmit}>I'm Feeling Chonky</button>
+            </div>        
+          </form>
+        </div>
+      );
+    }
+
+    else {
+      return (
+        <div>
           <label>
           Chonk Preference:
-            <select name='thickness' defaultValue={this.state.thickness} onChange={this.handleInput}>
+            <select name='thickness' id='thickness' defaultValue={this.state.thickness} 
+                    onChange={this.handleInput}>
               <option value='large'>Jumbo Chonk</option>
               <option value='xlarge'>Colossal Chonk</option>
-              <option value='all'>All Chonkers Need Love</option>
+              <option value='large,xlarge'>All Chonkers Need Love</option>
             </select>
           </label>
-          </div>
-          <button onClick={this.handleSubmit}>Submit</button>
-        </form>
-        <div id="response-all-cats">
-          <TubboContainer
-            cats={this.state.catResults}
-            arr={this.state.colArr}
-            breedArr={this.state.catBreeds}
-            newCats={this.newReq.bind(this)}
-          /> 
-        </div>
-      </div>
-    );
+          <label>
+            Search:
+              <input name='search' id='search' defaultValue={this.state.search} 
+                     type='text' onChange={this.handleInput}></input>
+          </label>
+          <label>
+            Distance:
+              <select name='miles' id='milesQ' defaultValue={this.state.miles} 
+                      onChange={this.handleInput}>
+                <option value='10'>10 Miles</option>
+                <option value='25'>25 Miles</option>
+                <option value='50'>50 Miles</option>
+                <option value='100'>100 Miles</option>
+                <option value='other'>Other</option>
+              </select>
+              <input name='miles' id='miles' type='text' 
+                     style={{display: this.element ? 'block' : 'none'}}></input>
+          </label>          
+          <div id="response-all-cats">
+            <TubboContainer
+              cats={this.state.catResults}
+              arr={this.state.colArr}
+              breedArr={this.state.catBreeds}
+              newCats={this.newReq.bind(this)}
+            /> 
+          </div>          
+        </div>        
+      );
+    }
   }
 }
 
@@ -153,39 +164,47 @@ class TubboContainer extends React.Component {
     if (this.props.cats) {
       return (
         <div>
-          <div id="prop-all-cats">
+          <div id='prop-all-cats'>
             {this.makeCats()}       
           </div>
-        <div>
-          <label>
-          Color
-            <select name='color' onChange={this.props.newCats}>
-              {this.props.arr.map((x,y) => <option key={y}>{x}</option>)}
-            </select>
-          </label>
-          <label>
-          Breed
-            <select name='breed' onChange={this.props.newCats}>
-               {this.props.breedArr.map((x,y) => <option key={y}>{x}</option>)}        
-            </select>
-          </label>
-          <label>
-          Coat Length
-            <select name='coat' onChange={this.props.newCats}>
-              <option value='Long'>Long</option>
-              <option value='Medium'>Medium</option>
-              <option value='Short'>Short</option>
-              <option value='Hairless'>Hairless</option>
-            </select>
-          </label>
-          <label>
-          Gender
-            <select name='gender' onChange={this.props.newCats}>
-              <option value='Male'>Male</option>
-              <option value='Female'>Female</option>
-            </select> 
-          </label>        
-         </div>
+        <div className='filterResults'>
+          <div id='colorFilter'>
+            <label>
+              Color
+                <select name='color' onChange={this.props.newCats}>
+                  {this.props.arr.map((x,y) => <option key={y}>{x}</option>)}
+                </select>
+            </label>
+          </div>
+          <div id='breedFilter'>
+            <label>
+              Breed
+                <select name='breed' onChange={this.props.newCats}>
+                   {this.props.breedArr.map((x,y) => <option key={y}>{x}</option>)}        
+                </select>
+            </label>
+          </div>
+          <div id='coatFilter'>
+            <label>
+              Coat Length
+                <select name='coat' onChange={this.props.newCats}>
+                  <option value='Long'>Long</option>
+                  <option value='Medium'>Medium</option>
+                  <option value='Short'>Short</option>
+                  <option value='Hairless'>Hairless</option>
+                </select>
+            </label>
+          </div>
+          <div id='genderFiler'>
+            <label>
+              Gender
+                <select name='gender' onChange={this.props.newCats}>
+                  <option value='Male'>Male</option>
+                  <option value='Female'>Female</option>
+                </select> 
+            </label>        
+           </div>
+          </div>
         </div>
       );
     } 
@@ -227,8 +246,9 @@ class Cat extends React.Component {
 
   onButtonClick() {
     let shelter = {'shelter_id': this.props.shelterId};
-    $.post('/shelter.json', shelter, (response) => {this.shelterInfo(response)});
-
+    $.post('/shelter.json', shelter, (response) => {
+      this.shelterInfo(response)
+    });
   }
 
   render() {
@@ -246,6 +266,7 @@ class Cat extends React.Component {
                          gender={this.props.gender}
                          color={this.props.color}
                          coatLen={this.props.coatLen}
+                         photo={this.props.photo}
                          shelter={this.state.shelterInfo}
             /> :
             null
@@ -274,7 +295,7 @@ class MoreDetails extends React.Component {
 
   createGoogleMap = () => {
     return new window.google.maps.Map(this.googleMapRef.current, {
-      zoom: 4,
+      zoom: 3,
       center: {
         lat: 26.8206,
         lng: 30.8025,
@@ -284,15 +305,51 @@ class MoreDetails extends React.Component {
   }
 
   render() {
-    console.log('shelter prop',this.props.shelter)
+    let shelProp = this.props.shelter[0]['props']
+
     return (
-        <div>
-          <p>{this.props.name}</p>
+      <div>
+        <div id='catSummary'>
+          <h4>{this.props.name}</h4>
           <p>{this.props.breed}</p>
-          <p>{this.props.email}</p>
-          <div id='map' ref={this.googleMapRef} style={{width: 400, height: 300}}></div>
         </div>
-      );
+        
+        <div id='about'>
+          <h4>About</h4>
+          <p>
+            Coat Length
+              <br></br>
+              {this.props.coatLen}
+              <br></br>
+            House-Trained
+              <br></br>
+            Health
+              <br></br>
+            Adoption Fee
+              <br></br>
+          </p>
+        </div>
+
+        <div id='shelterSummary'>
+          <h4>{shelProp['shelterName']}</h4>
+          <div id='map' ref={this.googleMapRef} style={{width: 400, height: 300}}></div>
+          <p>
+            Address: 
+              <br></br>
+              {shelProp['address']}
+              <br></br>
+              {shelProp['city']},&nbsp;
+              {shelProp['state']}&nbsp;
+              {shelProp['zipcode']}
+              <br></br>
+              {shelProp['email']}
+              <br></br>
+              {shelProp['phone']}
+          </p>
+        </div>
+      
+      </div>
+    );
   }
 }
 

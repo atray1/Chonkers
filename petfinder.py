@@ -64,12 +64,13 @@ def search_petfinder():
     url = 'https://api.petfinder.com/v2/animals'
     headers = {'Authorization': token}
     location_search = request.form.get('search')
-    miles = int(request.form.get('miles', '25'))
+    miles = int(request.form.get('miles', '100'))
     size = request.form.get('thickness', '')
     color = request.form.get('color', '')
     breed = request.form.get('breed', '')
     coat = request.form.get('coat', '')
     gender = request.form.get('gender', '')
+    print(size)
 
     payload = {'type': 'Cat',
                    'limit': 25, 
@@ -78,17 +79,18 @@ def search_petfinder():
                    'distance': miles,
                    'breed': breed,
                    'coat': coat,
-                   'gender': gender}
+                   'gender': gender,
+                   'size': size}
 
-    if size == 'large':
-        payload['size'] = 'large'
-        response = requests.get(url, headers=headers, params=payload)
-        data = response.json() 
+    # if size == 'large':
+    #     payload['size'] = 'large'
+    response = requests.get(url, headers=headers, params=payload)
+    data = response.json() 
 
-    else:
-        payload['size'] = 'xlarge'
-        response = requests.get(url, headers=headers, params=payload)
-        data = response.json() 
+    # else:
+    #     payload['size'] = 'xlarge'
+    #     response = requests.get(url, headers=headers, params=payload)
+    #     data = response.json() 
     
     return data
 
