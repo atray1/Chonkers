@@ -3,14 +3,16 @@
 class Search extends React.Component {    
   constructor() {
     super();
-    this.state = { 
-      search: undefined,
-      miles: 100, 
-      thickness: 'large,xlarge',
-      catResults: undefined,
-      colArr: [],
-      catBreeds: [],
-    };
+    this.state = {search: undefined,
+                  miles: 100, 
+                  thickness: 'large,xlarge',
+                  color: undefined,
+                  breed: undefined,
+                  coat: undefined,
+                  gender: undefined,
+                  catResults: undefined,
+                  colArr: [],
+                  catBreeds: []};
     this.handleInput = this.handleInput.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -21,54 +23,55 @@ class Search extends React.Component {
   }
 
   handleInput(e) {
-    this.setState({[e.target.name]: e.target.value});
-    
-    if (this.state.catResults !== undefined) {
+    if (this.state.catResults) {
       let element = document.getElementById('miles');
       if (e.target.name === 'miles' && e.target.value === 'other') {
-          element.style.display = 'block'
-      }
+        element.style.display = 'block';
+      } 
       else {
-          element.style.display = 'none'
-      }
-     this.handleSubmit(e)
+        element.style.display = 'none';
+      } 
+     this.setState({[e.target.name]: e.target.value}, (e) => {
+       this.handleSubmit(e)
+     });
+    }
+    else {
+      this.setState({[e.target.name]: e.target.value});
     }
   }
+
+  inputNew(e) {
+    this.setState({[e.target.name]: e.target.value}, (e) => {
+      this.handleSubmit(e)});
+    }
 
   handleSubmit(e) {
     if (this.state.catResults === undefined) {
       e.preventDefault();
     }
-      let search = this.state.search;
-      let miles = this.state.miles;
-      let thickness = this.state.thickness;
-      let search_data = {search: this.state.search,
-                         miles: this.state.miles,
-                         thickness: this.state.thickness}; 
-    //loading is true show dancing fat cat
-      $.post('/results.json', search_data, (response) => { 
-        this.setState({catResults: response}); //, () => {
-          // loading = false
-      });
-  }  
-
-  newReq(e) {
-    const{name, value} = e.target;
     let search = this.state.search;
     let miles = this.state.miles;
     let thickness = this.state.thickness;
-    let search_data = {search: this.state.search,
-                       miles: this.state.miles,
-                       thickness: this.state.thickness,
-                       [e.target.name]: e.target.value};
+    let color = this.state.color;
+    let breed = this.state.breed;
+    let coat = this.state.coat;
+    let gender = this.state.gender;
+    let search_data = {search: search,
+                       miles: miles,
+                       thickness: thickness,
+                       color: color,
+                       breed: breed,
+                       coat: coat,
+                       gender: gender}; 
+  //loading is true show dancing fat cat
     $.post('/results.json', search_data, (response) => { 
-      this.setState({catResults: response})
+      this.setState({catResults: response}); //, () => {
+        // loading = false
     });
-  }
+  }  
 
 
   render() {
-    console.log(this.state.thickness)
 
     if (this.state.catResults === undefined) {
       return (
@@ -121,7 +124,7 @@ class Search extends React.Component {
               cats={this.state.catResults}
               arr={this.state.colArr}
               breedArr={this.state.catBreeds}
-              newCats={this.newReq.bind(this)}
+              newFilter={this.inputNew.bind(this)}
             /> 
           </div>          
         </div>        
@@ -171,7 +174,7 @@ class TubboContainer extends React.Component {
           <div id='colorFilter'>
             <label>
               Color
-                <select name='color' onChange={this.props.newCats}>
+                <select name='color' onChange={this.props.newFilter}>
                   {this.props.arr.map((x,y) => <option key={y}>{x}</option>)}
                 </select>
             </label>
@@ -179,7 +182,7 @@ class TubboContainer extends React.Component {
           <div id='breedFilter'>
             <label>
               Breed
-                <select name='breed' onChange={this.props.newCats}>
+                <select name='breed' onChange={this.props.newFilter}>
                    {this.props.breedArr.map((x,y) => <option key={y}>{x}</option>)}        
                 </select>
             </label>
@@ -187,7 +190,7 @@ class TubboContainer extends React.Component {
           <div id='coatFilter'>
             <label>
               Coat Length
-                <select name='coat' onChange={this.props.newCats}>
+                <select name='coat' onChange={this.props.newFilter}>
                   <option value='Long'>Long</option>
                   <option value='Medium'>Medium</option>
                   <option value='Short'>Short</option>
@@ -198,7 +201,7 @@ class TubboContainer extends React.Component {
           <div id='genderFiler'>
             <label>
               Gender
-                <select name='gender' onChange={this.props.newCats}>
+                <select name='gender' onChange={this.props.newFilter}>
                   <option value='Male'>Male</option>
                   <option value='Female'>Female</option>
                 </select> 
