@@ -308,12 +308,18 @@ class MoreDetails extends React.Component {
     let map;
     let mapOptions;
     geocoder.geocode({'address': address}, (results) => {
-      mapOptions = {zoom: 10,
+      mapOptions = {zoom: 14,
                     lat: results[0].geometry.location.lat(),
                     lng: results[0].geometry.location.lng()}
       map = new window.google.maps.Map(this.googleMapRef.current, mapOptions);
       map.setCenter(results[0].geometry.location);
-      let marker = new window.google.maps.Marker({map: map, position: results[0].geometry.location});
+      let marker = new window.google.maps.Marker({map: map, 
+                                                  position: results[0].geometry.location,
+                                                  icon: { 
+                                                    url:'static/img/cat19-512.png',
+                                                    scaledSize: {width: 55,
+                                                                 height: 55}
+                                                  }});
       return marker
     });
   }
