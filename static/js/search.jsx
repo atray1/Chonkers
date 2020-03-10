@@ -1,4 +1,7 @@
 //show results based on distance 
+function showMap(position) {
+
+}
 
 class Search extends React.Component {    
   constructor() {
@@ -74,6 +77,7 @@ class Search extends React.Component {
   render() {
 
     if (this.state.catResults === undefined) {
+      navigator.geolocation.getCurrentPosition(showMap);
       return (
         <div>
           <form>
@@ -270,7 +274,7 @@ class Cat extends React.Component {
                          color={this.props.color}
                          coatLen={this.props.coatLen}
                          photo={this.props.photo}
-                         shelter={this.state.shelterInfo}
+                         shelter={this.state.shelterInfo[0]['props']}
             /> :
             null
           }        
@@ -292,23 +296,30 @@ class MoreDetails extends React.Component {
     googleMapScript.src = 'https://maps.googleapis.com/maps/api/js?key=&libraries=places'
     window.document.body.appendChild(googleMapScript)
     googleMapScript.addEventListener('load', () => {
-      this.moodyMap = this.createGoogleMap() 
+      this.shelter = this.geo() 
      });
   }
 
-  createGoogleMap = () => {
-    return new window.google.maps.Map(this.googleMapRef.current, {
-      zoom: 3,
-      center: {
-        lat: 26.8206,
-        lng: 30.8025,
-      },
-      disableDefaultUI: true,
-    })
+
+  geo = () => {
+    let shel = this.props.shelter;
+    let address = shel['address'] + ',' + shel['city'] + ',' + shel['state'] + ',' + 'United States';
+    let geocoder = new google.maps.Geocoder();
+    let map;
+    let mapOptions;
+    geocoder.geocode({'address': address}, (results) => {
+      mapOptions = {zoom: 10,
+                    lat: results[0].geometry.location.lat(),
+                    lng: results[0].geometry.location.lng()}
+      map = new window.google.maps.Map(this.googleMapRef.current, mapOptions);
+      map.setCenter(results[0].geometry.location);
+      let marker = new window.google.maps.Marker({map: map, position: results[0].geometry.location});
+      return marker
+    });
   }
 
+
   render() {
-    let shelProp = this.props.shelter[0]['props']
 
     return (
       <div>
@@ -334,20 +345,20 @@ class MoreDetails extends React.Component {
         </div>
 
         <div id='shelterSummary'>
-          <h4>{shelProp['shelterName']}</h4>
+          <h4>{this.props.shelter['shelterName']}</h4>
           <div id='map' ref={this.googleMapRef} style={{width: 400, height: 300}}></div>
           <p>
             Address: 
               <br></br>
-              {shelProp['address']}
+              {this.props.shelter['address']}
               <br></br>
-              {shelProp['city']},&nbsp;
-              {shelProp['state']}&nbsp;
-              {shelProp['zipcode']}
+              {this.props.shelter['city']},&nbsp;
+              {this.props.shelter['state']}&nbsp;
+              {this.props.shelter['zipcode']}
               <br></br>
-              {shelProp['email']}
+              {this.props.shelter['email']}
               <br></br>
-              {shelProp['phone']}
+              {this.props.shelter['phone']}
           </p>
         </div>
       

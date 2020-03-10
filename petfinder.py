@@ -70,8 +70,7 @@ def search_petfinder():
     breed = request.form.get('breed', '')
     coat = request.form.get('coat', '')
     gender = request.form.get('gender', '')
-    print(size)
-
+   
     payload = {'type': 'Cat',
                    'limit': 25, 
                    'location': location_search,
@@ -81,16 +80,9 @@ def search_petfinder():
                    'coat': coat,
                    'gender': gender,
                    'size': size}
-
-    # if size == 'large':
-    #     payload['size'] = 'large'
+    
     response = requests.get(url, headers=headers, params=payload)
     data = response.json() 
-
-    # else:
-    #     payload['size'] = 'xlarge'
-    #     response = requests.get(url, headers=headers, params=payload)
-    #     data = response.json() 
     
     return data
 
