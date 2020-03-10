@@ -79,16 +79,24 @@ class Search extends React.Component {
     if (this.state.catResults === undefined) {
       navigator.geolocation.getCurrentPosition(showMap);
       return (
-        <div>
-          <form>
-            <div id='search'>
-              <label>
-                Search:
-                <input name='search' type='text' onChange={this.handleInput}></input>
-              </label>
-                <button onClick={this.handleSubmit}>I'm Feeling Chonky</button>
-            </div>        
-          </form>
+        <div className='container'>
+          <div className='col-md-6 col-md-offset-3 col-lg-12'>
+              <div className='row'>
+                <div id='logo' className='col-centered text-center'>
+                  <h1>Logo goes here</h1>
+                <form>
+                  <div id='search'>
+                    <input className='form-control' name='search' type='text' 
+                      placeholder='Search' required onChange={this.handleInput}>
+                    </input>
+                    <button id='chonk-btn' className='btn btn-success' type='submit' 
+                      onClick={this.handleSubmit}>I'm Feeling Chonky
+                    </button>
+                  </div>        
+                </form>
+              </div>
+            </div>
+          </div>
         </div>
       );
     }

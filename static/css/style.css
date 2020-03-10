@@ -1,0 +1,17 @@
+.col-centered {
+    margin: 0 auto;
+}
+
+.container {
+    margin-top: 15%;
+}
+
+#search {
+    width: 400px;
+    margin-top: 6%;
+}
+
+#chonk-btn {
+    width: 165px;
+    margin-top: 3%;
+}
