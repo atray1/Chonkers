@@ -73,6 +73,15 @@ class Search extends React.Component {
     });
   }  
 
+//  <div id='blah'>
+// <svg className="bi bi-search" width="1em" height="1em" viewBox="0 0 20 20" 
+//   fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+//   <path fillRule="evenodd" d="M12.442 12.442a1 1 0 011.415 0l3.85 3.85a1 
+//   1 0 01-1.414 1.415l-3.85-3.85a1 1 0 010-1.415z" clipRule="evenodd"/>
+//   <path fillRule="evenodd" d="M8.5 14a5.5 5.5 0 100-11 5.5 5.5 0 000 
+//   11zM15 8.5a6.5 6.5 0 11-13 0 6.5 6.5 0 0113 0z" clipRule="evenodd"/>
+// </svg>  
+
 
   render() {
 
@@ -80,12 +89,12 @@ class Search extends React.Component {
       navigator.geolocation.getCurrentPosition(showMap);
       return (
         <div className='container'>
-          <div className='col-md-6 col-md-offset-3 col-lg-12'>
+          <div className='col-xs-6 col-xs-offset-3 col-lg-12'>
               <div className='row'>
                 <div id='logo' className='col-centered text-center'>
                   <h1>Logo goes here</h1>
                 <form>
-                  <div id='search'>
+                  <div id='search' className='intial-search'>
                     <input className='form-control' name='search' type='text' 
                       placeholder='Search' required onChange={this.handleInput}>
                     </input>
@@ -104,24 +113,29 @@ class Search extends React.Component {
     else {
       return (
         <div>
-          <label>
-          Chonk Preference:
-            <select name='thickness' id='thickness' defaultValue={this.state.thickness} 
-                    onChange={this.handleInput}>
-              <option value='large'>Jumbo Chonk</option>
-              <option value='xlarge'>Colossal Chonk</option>
-              <option value='large,xlarge'>All Chonkers Need Love</option>
-            </select>
-          </label>
-          <label>
-            Search:
-              <input name='search' id='search' defaultValue={this.state.search} 
-                     type='text' onChange={this.handleInput}></input>
-          </label>
-          <label>
-            Distance:
-              <select name='miles' id='milesQ' defaultValue={this.state.miles} 
-                      onChange={this.handleInput}>
+
+          <nav className="navbar navbar-expand-lg navbar-light bg-light">
+
+            <button className="navbar-toggler" type="button" data-toggle="collapse" 
+            data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" 
+            aria-expanded="false" aria-label="Toggle navigation">
+            <span className="navbar-toggler-icon"></span>
+            </button>
+            <div className="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul className="navbar-nav mr-auto">
+      
+            <form className="form-inline my-2 my-lg-0">
+              <div className="md-form my-0">
+              <select className="form-control mr-sm-2" name='thickness' id='thickness' 
+              defaultValue={this.state.thickness} onChange={this.handleInput}>
+                <option value='large,xlarge'>All Chonkers Need Love</option>
+                <option value='large'>Jumbo Chonk</option>
+                <option value='xlarge'>Colossal Chonk</option>             
+              </select>
+              </div>
+              <div className="md-form my-0">
+              <select className="form-control mr-sm-2"  name='miles' id='milesQ' 
+                defaultValue={this.state.miles} onChange={this.handleInput}>
                 <option value='10'>10 Miles</option>
                 <option value='25'>25 Miles</option>
                 <option value='50'>50 Miles</option>
@@ -129,8 +143,19 @@ class Search extends React.Component {
                 <option value='other'>Other</option>
               </select>
               <input name='miles' id='miles' type='text' 
-                     style={{display: this.element ? 'block' : 'none'}}></input>
-          </label>          
+                     style={{display: this.element ? 'block' : 'none'}}></input>            
+              </div>
+             <div className="md-form my-0">
+              <input className="form-control mr-sm-2" name='search' id='search' 
+                defaultValue={this.state.search} type='text' 
+                onChange={this.handleInput}></input>
+
+             </div>
+              </form>
+            </ul>
+           </div>
+         </nav>
+
           <div id="response-all-cats">
             <TubboContainer
               cats={this.state.catResults}
@@ -138,7 +163,8 @@ class Search extends React.Component {
               breedArr={this.state.catBreeds}
               newFilter={this.inputNew.bind(this)}
             /> 
-          </div>          
+          </div>  
+
         </div>        
       );
     }
@@ -256,7 +282,7 @@ class Cat extends React.Component {
                         zipcode={res.location.zipcode}
                       />
         );
-    this.setState({shelterInfo: tubboLocation});
+    this.setState({shelterInfo: tubboLocation}, () => {$('#moreDetailsModal').modal('show')});
   }
 
   onButtonClick() {
@@ -269,11 +295,12 @@ class Cat extends React.Component {
   render() {
 
     return (
-      <div className="individ-cat">
-         <button onClick={this.onButtonClick}>
-            <img className="medium-image" src={this.props.photo}/>
-            <p>{this.props.name}</p>
-          </button>
+      <div id="individ-cat">
+            <a href="#moreDetailsModal">
+           <button onClick={this.onButtonClick}>
+              <img className="img-top" src={this.props.photo}/>
+              <p>{this.props.name}</p>
+            </button></a>
         <div id="cat-more-details">
           {this.state.shelterInfo ?
             <MoreDetails name={this.props.name}
@@ -325,63 +352,82 @@ class MoreDetails extends React.Component {
                                                   position: results[0].geometry.location,
                                                   icon: { 
                                                     url:'static/img/cat19-512.png',
-                                                    scaledSize: {width: 55,
-                                                                 height: 55}
+                                                    scaledSize: {width: 50,
+                                                                 height: 50}
                                                   }});
       return marker
     });
   }
 
 
+
   render() {
+    // $('a[href$="#moreDetailsModal"]').on( "click", function() {
+    //  $('#moreDetailsModal').modal('show');
+    // });
 
     return (
-      <div>
-        <div id='catSummary'>
-          <h4>{this.props.name}</h4>
-          <p>{this.props.breed}</p>
+      <div id='fatty-modal'>
+        <div className="modal right fade" id="moreDetailsModal" tabIndex="-1" role="dialog" aria-labelledby="moreDetailsModalLabel" aria-hidden="true">
+          <div className="modal-dialog" role="document">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title" id="moreDetailsModalLabel">Modal title</h5>
+                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div className="modal-body">
+                <div id='catSummary'>
+                  <h4>{this.props.name}</h4>
+                  <p>{this.props.breed}</p>
+                </div>
+                <div id='about'>
+                  <h4>About</h4>
+                  <p>
+                    Coat Length
+                      <br></br>
+                      {this.props.coatLen}
+                      <br></br>
+                    House-Trained
+                      <br></br>
+                    Health
+                      <br></br>
+                    Adoption Fee
+                      <br></br>
+                  </p>
+                </div>
+                <div id='shelterSummary'>
+                  <h4>{this.props.shelter['shelterName']}</h4>
+                  <div id='map' ref={this.googleMapRef} style={{width: 350, height: 250}}></div>
+                  <p>
+                    Address: 
+                      <br></br>
+                      {this.props.shelter['address']}
+                      <br></br>
+                      {this.props.shelter['city']},&nbsp;
+                      {this.props.shelter['state']}&nbsp;
+                      {this.props.shelter['zipcode']}
+                      <br></br>
+                      {this.props.shelter['email']}
+                      <br></br>
+                      {this.props.shelter['phone']}
+                  </p>
+                </div>
+              </div>
+              <div className="modal-footer">
+                <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" className="btn btn-primary">Save changes</button>
+              </div>
+            </div>
+          </div>
         </div>
-        
-        <div id='about'>
-          <h4>About</h4>
-          <p>
-            Coat Length
-              <br></br>
-              {this.props.coatLen}
-              <br></br>
-            House-Trained
-              <br></br>
-            Health
-              <br></br>
-            Adoption Fee
-              <br></br>
-          </p>
-        </div>
-
-        <div id='shelterSummary'>
-          <h4>{this.props.shelter['shelterName']}</h4>
-          <div id='map' ref={this.googleMapRef} style={{width: 400, height: 300}}></div>
-          <p>
-            Address: 
-              <br></br>
-              {this.props.shelter['address']}
-              <br></br>
-              {this.props.shelter['city']},&nbsp;
-              {this.props.shelter['state']}&nbsp;
-              {this.props.shelter['zipcode']}
-              <br></br>
-              {this.props.shelter['email']}
-              <br></br>
-              {this.props.shelter['phone']}
-          </p>
-        </div>
-      
       </div>
     );
   }
 }
 
-
+      
 
 
 ReactDOM.render(

@@ -6,7 +6,7 @@
     margin-top: 15%;
 }
 
-#search {
+.intial-search {
     width: 400px;
     margin-top: 6%;
 }
@@ -14,4 +14,57 @@
 #chonk-btn {
     width: 165px;
     margin-top: 3%;
+}
+
+#blah {
+    position: relative;
+    top: -32px;
+    left: -191px;
+}
+
+#prop-all-cats {
+    margin-left: 110px;
+}
+
+#individ-cat {
+    display: inline-block;
+    margin: 40px;
+}
+
+img {
+    width: 260px;
+    height: 260px;
+    object-fit: cover;
+}
+
+.modal.right .modal-dialog {
+    position: fixed;
+    margin: auto;
+    width: 390px;
+    height: 100%;
+    -webkit-transform: translate3d(0%, 0, 0);
+    -ms-transform: translate3d(0%, 0, 0);
+    -o-transform: translate3d(0%, 0, 0);
+    transform: translate3d(0%, 0, 0);
+}
+
+.modal.right .modal-content {
+    height: 100%;
+    overflow-y: auto;
+}
+
+.modal.right .modal-body {
+    padding: 15px 15px 80px;
+}
+
+.modal.right.fade .modal-dialog {
+    right: -320px;
+    -webkit-transition: opacity 0.3s linear, right 0.3s ease-out;
+    -moz-transition: opacity 0.3s linear, right 0.3s ease-out;
+    -o-transition: opacity 0.3s linear, right 0.3s ease-out;
+    transition: opacity 0.3s linear, right 0.3s ease-out;
+}
+
+.modal.right.fade.show .modal-dialog {
+    right: 0;
 }
