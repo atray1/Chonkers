@@ -61,7 +61,7 @@ def index():
     return render_template("homepage.html")
 
 
-@app.route('/search-results')
+@app.route('/search-results', methods=['POST'])
 def cat_results():
     """Based on user search, display cats - get animals endpoint"""
 

@@ -1,70 +1,231 @@
 .col-centered {
-    margin: 0 auto;
+  margin: 0 auto;
 }
 
 .container {
-    margin-top: 15%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 1680px;
+}
+
+/*front page*/
+div.row#main {
+  height: 1000px;
+  box-shadow: 0px 5px 20px;
+  border-radius: 30px;
+  background: url(https://i.postimg.cc/pd6nJ26r/main.png) no-repeat center center;
+  background-size: contain;
+  transition: 0.3s ease;
+  filter: brightness(115%);
+}
+
+h1.logo {
+  color: white;
+  font-size: 3.7rem;
+  -webkit-font-smoothing: auto;
+}
+
+#logo {
+  padding-top: 500px
+}
+
+div.container#main {
+  height: 1680px;
+  width: 1000px; 
+  background: floralwhite;
+}
+
+html, body, div#app, div.container#main {
+  background-color: floralwhite;
 }
 
 .intial-search {
-    width: 400px;
-    margin-top: 6%;
+  width: 340px;
+  margin-top: 3%;
 }
 
 #chonk-btn {
-    width: 165px;
-    margin-top: 3%;
+  width: 154px;
+  margin-top: 3%;
+  -webkit-font-smoothing: auto;
+  padding: .320rem .75rem;
+  background-color: #4682B4;
+  border-color: #4682B4;
 }
 
-#blah {
-    position: relative;
-    top: -32px;
-    left: -191px;
+
+/*second page*/
+div#response-all-cats {
+  background-color: lightgray;
 }
 
-#prop-all-cats {
-    margin-left: 110px;
+p.img-name {
+  font-size: 1.2rem;
+  font-family: "Verdana";
+  -webkit-font-smoothing: auto;
+  margin: 0.2rem;
+}
+
+div.container#allfilters {
+ 
+}
+
+p {
+  line-height: 1.5em;
+}
+
+#props-all-cats {
+  display: flex;
+  justify-content: center;
+  flex-flow: wrap;
+  padding: 15px;
+}
+
+#div-cats {
+  display: flex;
+  justify-content: center;
+  flex-flow: wrap;
+  padding: 50px;
+}
+
+div-fil {
+  display: flex;
+  justify-content: center;
+  flex-flow: wrap;
+  padding: 50px;
 }
 
 #individ-cat {
-    display: inline-block;
-    margin: 40px;
+  display: inline-block;
 }
 
-img {
-    width: 260px;
-    height: 260px;
-    object-fit: cover;
+#cat-btn {
+  border-radius: 10px;
+  display: inline-block;
+  box-shadow: 0px 5px 20px;
+  transition: 0.3s ease;
+  margin: 30px;
+}
+
+#cat-btn:hover {
+  cursor: pointer;
+  filter: brightness(120%);
+  -webkit-filter: brightness(120%);
+}
+
+.img-top {
+  width: 290px;
+  height: 270px;
+  object-fit: cover;
+  vertical-align: middle;
+  border-style: none;
 }
 
 .modal.right .modal-dialog {
-    position: fixed;
-    margin: auto;
-    width: 390px;
-    height: 100%;
-    -webkit-transform: translate3d(0%, 0, 0);
-    -ms-transform: translate3d(0%, 0, 0);
-    -o-transform: translate3d(0%, 0, 0);
-    transform: translate3d(0%, 0, 0);
+  position: fixed;
+  margin: auto;
+  width: 390px;
+  height: 100%;
+  -webkit-transform: translate3d(0%, 0, 0);
+  -ms-transform: translate3d(0%, 0, 0);
+  -o-transform: translate3d(0%, 0, 0);
+  transform: translate3d(0%, 0, 0);
 }
 
 .modal.right .modal-content {
-    height: 100%;
-    overflow-y: auto;
+  height: 100%;
+  overflow-y: auto;
 }
 
 .modal.right .modal-body {
-    padding: 15px 15px 80px;
+  padding: 15px 15px 80px;
 }
 
 .modal.right.fade .modal-dialog {
-    right: -320px;
-    -webkit-transition: opacity 0.3s linear, right 0.3s ease-out;
-    -moz-transition: opacity 0.3s linear, right 0.3s ease-out;
-    -o-transition: opacity 0.3s linear, right 0.3s ease-out;
-    transition: opacity 0.3s linear, right 0.3s ease-out;
+  right: -320px;
+  -webkit-transition: opacity 0.3s linear, right 0.3s ease-out;
+  -moz-transition: opacity 0.3s linear, right 0.3s ease-out;
+  -o-transition: opacity 0.3s linear, right 0.3s ease-out;
+  transition: opacity 0.3s linear, right 0.3s ease-out;
 }
 
 .modal.right.fade.show .modal-dialog {
-    right: 0;
+  right: 0;
 }
+
+#mainTubs {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+body {
+  margin: 40px 0;
+  font-family: "Raleway";
+  font-size: 14px;
+  font-weight: 500;
+  -webkit-font-smoothing: antialiased;
+}
+
+.title {
+  font-family: "Raleway";
+  font-size: 24px;
+  font-weight: 700;
+  color: #5D4037;
+  text-align: center;
+}
+
+$card-bg-color: #C8A455;
+
+* {
+  color: #FFF;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Verdana";
+  text-align: center;
+}
+/*
+body{
+  background-color: #d2d2d2;
+}*/
+
+.card-wrapper {
+  margin: 10px;
+  transform: perspective(800px);
+  transform-style: preserve-3d;
+  cursor: pointer;
+  
+}
+
+#filterResults {
+  position: absolute;
+  top: 140px;
+  padding-left: 10px;
+}
+
+.form-control {
+  cursor: pointer;
+}
+
+#colorFilter {
+  padding-bottom: 20px;
+}
+
+#breedFilter {
+  padding-bottom: 20px;
+}
+
+#coatFilter {
+  padding-bottom: 20px;
+}
+
+#genderFiler {
+  padding-bottom: 20px;
+}
+
+
+
+
+

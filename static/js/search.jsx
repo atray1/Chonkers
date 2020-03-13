@@ -73,14 +73,19 @@ class Search extends React.Component {
     });
   }  
 
-//  <div id='blah'>
-// <svg className="bi bi-search" width="1em" height="1em" viewBox="0 0 20 20" 
-//   fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-//   <path fillRule="evenodd" d="M12.442 12.442a1 1 0 011.415 0l3.85 3.85a1 
-//   1 0 01-1.414 1.415l-3.85-3.85a1 1 0 010-1.415z" clipRule="evenodd"/>
-//   <path fillRule="evenodd" d="M8.5 14a5.5 5.5 0 100-11 5.5 5.5 0 000 
-//   11zM15 8.5a6.5 6.5 0 11-13 0 6.5 6.5 0 0113 0z" clipRule="evenodd"/>
-// </svg>  
+        //<img className='col-md-12' src='static/img/tubbos.png'/></div>
+       // <div>
+       //  <nav class="navbar navbar-expand-lg navbar-light">
+       //    <a class="navbar-brand" href="#">chonkrs</a>
+       //  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+       //    <ul class="navbar-nav mr-auto">
+       //      <li class="nav-item">
+       //        <li><a href="#">About</a></li> 
+       //      <ul class="nav navbar-nav navbar-right">         
+       //        <li><a href="#">Help</a></li>
+       //      </ul>
+       //  </div>
+       //  </nav>
 
 
   render() {
@@ -88,11 +93,13 @@ class Search extends React.Component {
     if (this.state.catResults === undefined) {
       navigator.geolocation.getCurrentPosition(showMap);
       return (
-        <div className='container'>
+
+        <div className='container' id='main'>
+        <div id='mainTubs'>
           <div className='col-xs-6 col-xs-offset-3 col-lg-12'>
-              <div className='row'>
+              <div className='row' id="main">
                 <div id='logo' className='col-centered text-center'>
-                  <h1>Logo goes here</h1>
+                  <h1 className='logo'>chonkrs</h1>
                 <form>
                   <div id='search' className='intial-search'>
                     <input className='form-control' name='search' type='text' 
@@ -107,8 +114,10 @@ class Search extends React.Component {
             </div>
           </div>
         </div>
+      </div>
       );
     }
+
 
     else {
       return (
@@ -200,53 +209,62 @@ class TubboContainer extends React.Component {
     return cats
   }
 
+           //      <div className='row'></div>
+           //    <div className='container'></div>
+           // <div className='col-3'></div>
+
+
   render() {
 
     if (this.props.cats) {
       return (
-        <div>
-          <div id='prop-all-cats'>
-            {this.makeCats()}       
+        <div className='container' id='allfilters'>
+          <div className='row'>
+          <div className='col-xs-12 col-md-9 order-md-12' id='div-cats'>
+            <div id='prop-all-cats'>
+              {this.makeCats()}       
+            </div>
           </div>
-        <div className='filterResults'>
-          <div id='colorFilter'>
-            <label>
-              Color
-                <select name='color' onChange={this.props.newFilter}>
+          <div className='col-xs-12 col-md-3 order-md-1' id='div-fil'>
+           <form  id='filterResults'>
+            <div>
+              <div id='colorFilter'>
+                <select className="form-control" name='color' 
+                  onChange={this.props.newFilter}>
+                  <option selected>Color</option>
                   {this.props.arr.map((x,y) => <option key={y}>{x}</option>)}
                 </select>
-            </label>
-          </div>
-          <div id='breedFilter'>
-            <label>
-              Breed
-                <select name='breed' onChange={this.props.newFilter}>
+              </div>
+              <div id='breedFilter'>
+                <select className="form-control" 
+                   name='breed' onChange={this.props.newFilter}>
+                   <option selected>Breed</option>
                    {this.props.breedArr.map((x,y) => <option key={y}>{x}</option>)}        
                 </select>
-            </label>
-          </div>
-          <div id='coatFilter'>
-            <label>
-              Coat Length
-                <select name='coat' onChange={this.props.newFilter}>
+              </div>
+              <div id='coatFilter'>
+                <select className="form-control" name='coat' 
+                  onChange={this.props.newFilter}>
+                  <option selected>Coat Length</option>
                   <option value='Long'>Long</option>
                   <option value='Medium'>Medium</option>
                   <option value='Short'>Short</option>
                   <option value='Hairless'>Hairless</option>
                 </select>
-            </label>
-          </div>
-          <div id='genderFiler'>
-            <label>
-              Gender
-                <select name='gender' onChange={this.props.newFilter}>
-                  <option value='Male'>Male</option>
-                  <option value='Female'>Female</option>
-                </select> 
-            </label>        
-           </div>
+              </div>
+                <div id='genderFiler'>
+                  <select className="form-control" name='gender' 
+                  onChange={this.props.newFilter}>
+                    <option selected>Gender</option>
+                    <option value='Male'>Male</option>
+                    <option value='Female'>Female</option>
+                  </select>        
+                 </div>
+              </div>
+            </form>
           </div>
         </div>
+      </div>
       );
     } 
 
@@ -262,7 +280,7 @@ class TubboContainer extends React.Component {
 class Cat extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {shelterInfo: undefined};
+    this.state = {shelterInfo: undefined,}
     this.onButtonClick = this.onButtonClick.bind(this);
     this.shelterInfo = this.shelterInfo.bind(this);
   }
@@ -296,11 +314,11 @@ class Cat extends React.Component {
 
     return (
       <div id="individ-cat">
-            <a href="#moreDetailsModal">
-           <button onClick={this.onButtonClick}>
-              <img className="img-top" src={this.props.photo}/>
-              <p>{this.props.name}</p>
-            </button></a>
+        <a href="#moreDetailsModal">
+       <button onClick={this.onButtonClick} id="cat-btn">
+          <img className="img-top" src={this.props.photo}/>
+          <p className='img-name'>{this.props.name}</p>
+        </button></a>
         <div id="cat-more-details">
           {this.state.shelterInfo ?
             <MoreDetails name={this.props.name}
@@ -328,7 +346,7 @@ class MoreDetails extends React.Component {
 
   componentDidMount() {
     const googleMapScript = document.createElement("script")
-    googleMapScript.src = 'https://maps.googleapis.com/maps/api/js?key=&libraries=places'
+    googleMapScript.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDC-y1dMTTh5g5dhr5KmpnOg7FEt5FB3Es&libraries=places'
     window.document.body.appendChild(googleMapScript)
     googleMapScript.addEventListener('load', () => {
       this.shelter = this.geo() 
@@ -362,13 +380,11 @@ class MoreDetails extends React.Component {
 
 
   render() {
-    // $('a[href$="#moreDetailsModal"]').on( "click", function() {
-    //  $('#moreDetailsModal').modal('show');
-    // });
 
     return (
       <div id='fatty-modal'>
-        <div className="modal right fade" id="moreDetailsModal" tabIndex="-1" role="dialog" aria-labelledby="moreDetailsModalLabel" aria-hidden="true">
+        <div className="modal right fade" id="moreDetailsModal" tabIndex="-1" 
+              role="dialog" aria-labelledby="moreDetailsModalLabel" aria-hidden="true">
           <div className="modal-dialog" role="document">
             <div className="modal-content">
               <div className="modal-header">
@@ -379,6 +395,7 @@ class MoreDetails extends React.Component {
               </div>
               <div className="modal-body">
                 <div id='catSummary'>
+                  <img className="img-top" src={this.props.photo}/>
                   <h4>{this.props.name}</h4>
                   <p>{this.props.breed}</p>
                 </div>
