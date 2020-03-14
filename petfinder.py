@@ -38,7 +38,7 @@ def get_breeds():
     for breed in data['breeds']:
         breeds['breeds'].append(breed['name'])
 
-    return breeds
+    return data
 
 
 def get_colors():
@@ -72,7 +72,7 @@ def search_petfinder():
     gender = request.form.get('gender', '')
    
     payload = {'type': 'Cat',
-                   'limit': 25, 
+                   'limit': 1, 
                    'location': location_search,
                    'color': color,
                    'distance': miles,

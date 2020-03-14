@@ -9,7 +9,49 @@
   max-width: 1680px;
 }
 
+img.col-md-12#img-nav {
+  padding: 0px;
+  margin-top: -40px;
+
+}
+
+ul.nav-item#aboutbtn {
+  padding: 8px 0px;
+}
+
+button#aboutbtn.btn.btn-primary {
+  color: rgba(0,0,0,.5);
+  background-color: transparent;
+  border-color: transparent;
+  font: 15px Raleway;
+  padding: 8px 18px;
+}
+
+ul.nav-item#faqbtn {
+  padding: 8px 0px;
+}
+
+p#cat-name {
+margin: 0px;
+  margin-top: -64px;
+  color: white;
+  font-size: 43px;
+  -webkit-font-smoothing: auto;
+}
+
+button#faqbtn.btn.btn-primary {
+  color: rgba(0,0,0,.5);
+  background-color: transparent;
+  border-color: transparent;
+  font: 15px Raleway;
+  padding: 8px 0px;
+}
+
 /*front page*/
+#main-nav {
+  margin-top: -40px;
+}
+
 div.row#main {
   height: 1000px;
   box-shadow: 0px 5px 20px;
@@ -18,6 +60,7 @@ div.row#main {
   background-size: contain;
   transition: 0.3s ease;
   filter: brightness(115%);
+  margin: 0;
 }
 
 h1.logo {
@@ -31,7 +74,7 @@ h1.logo {
 }
 
 div.container#main {
-  height: 1680px;
+  height: 1200px;
   width: 1000px; 
   background: floralwhite;
 }
@@ -54,10 +97,23 @@ html, body, div#app, div.container#main {
   border-color: #4682B4;
 }
 
+div#res {
+  margin-top: -40px;
+  margin-bottom: -40px;
+}
 
 /*second page*/
 div#response-all-cats {
   background-color: lightgray;
+}
+
+div.row#rep-img {
+  margin-bottom: -40px;
+  background-image: url("https://i.postimg.cc/SxQzNNzg/shadow-cats-watercolor-png-black-cat-drawing-cute-11563015027hbj.png");
+  background-repeat: repeat;
+  background-size: 500px;
+
+
 }
 
 p.img-name {
@@ -67,8 +123,9 @@ p.img-name {
   margin: 0.2rem;
 }
 
-div.container#allfilters {
- 
+div#allfilters.containers {
+ display: inline-block;
+
 }
 
 p {
@@ -100,7 +157,8 @@ div-fil {
   display: inline-block;
 }
 
-#cat-btn {
+button#cat-btn {
+  padding: 0px;
   border-radius: 10px;
   display: inline-block;
   box-shadow: 0px 5px 20px;
@@ -115,13 +173,27 @@ div-fil {
 }
 
 .img-top {
-  width: 290px;
-  height: 270px;
+  width: 300px;
+  height: 320px;
+  border-radius: 10px;
   object-fit: cover;
   vertical-align: middle;
   border-style: none;
 }
 
+.img#modal-pic.img-top {
+  width: 300px;
+  height: 320px;
+  object-fit: cover;
+  vertical-align: middle;
+  border-style: none;
+}
+
+div#catSummary {
+  padding-left: 24px;
+}
+
+/*more details modal*/
 .modal.right .modal-dialog {
   position: fixed;
   margin: auto;
@@ -184,7 +256,6 @@ $card-bg-color: #C8A455;
 
 h1, h2, h3, h4, h5, h6 {
   font-family: "Verdana";
-  text-align: center;
 }
 /*
 body{
@@ -199,30 +270,42 @@ body{
   
 }
 
-#filterResults {
-  position: absolute;
+form#filterResults {
+  position: relative;
   top: 140px;
-  padding-left: 10px;
+  padding-left: 100px;
 }
 
 .form-control {
   cursor: pointer;
 }
 
-#colorFilter {
+div#colorFilter {
   padding-bottom: 20px;
 }
 
-#breedFilter {
+div#breedFilter {
   padding-bottom: 20px;
 }
 
-#coatFilter {
+div#coatFilter {
   padding-bottom: 20px;
 }
 
-#genderFiler {
+div#genderFiler {
   padding-bottom: 20px;
+}
+
+
+/*FAQs modal*/
+.modal .modal-dialog.modal-lg#faqs {
+  margin: auto;
+  width: 900px;
+  height: 100%;
+}
+
+.modal .modal-content#faqs{
+  height: 65%;
 }
 
 

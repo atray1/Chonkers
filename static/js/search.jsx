@@ -20,10 +20,10 @@ class Search extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  componentDidMount() {
-    $.get('/breeds.json', (response) => {this.setState({catBreeds: response.breeds})});
-    $.get('/colors.json', (response) => {this.setState({colArr: response.colors})});
-  }
+  // componentDidMount() {
+  //   $.get('/breeds.json', (response) => {this.setState({catBreeds: response.breeds})});
+  //   $.get('/colors.json', (response) => {this.setState({colArr: response.colors})});
+  // }
 
   handleInput(e) {
     if (this.state.catResults) {
@@ -73,43 +73,69 @@ class Search extends React.Component {
     });
   }  
 
-        //<img className='col-md-12' src='static/img/tubbos.png'/></div>
-       // <div>
-       //  <nav class="navbar navbar-expand-lg navbar-light">
-       //    <a class="navbar-brand" href="#">chonkrs</a>
-       //  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-       //    <ul class="navbar-nav mr-auto">
-       //      <li class="nav-item">
-       //        <li><a href="#">About</a></li> 
-       //      <ul class="nav navbar-nav navbar-right">         
-       //        <li><a href="#">Help</a></li>
-       //      </ul>
-       //  </div>
-       //  </nav>
-
 
   render() {
 
     if (this.state.catResults === undefined) {
       navigator.geolocation.getCurrentPosition(showMap);
       return (
+        <div>
+          <div>
 
-        <div className='container' id='main'>
-        <div id='mainTubs'>
-          <div className='col-xs-6 col-xs-offset-3 col-lg-12'>
-              <div className='row' id="main">
-                <div id='logo' className='col-centered text-center'>
-                  <h1 className='logo'>chonkrs</h1>
-                <form>
-                  <div id='search' className='intial-search'>
-                    <input className='form-control' name='search' type='text' 
-                      placeholder='Search' required onChange={this.handleInput}>
-                    </input>
-                    <button id='chonk-btn' className='btn btn-success' type='submit' 
-                      onClick={this.handleSubmit}>I'm Feeling Chonky
-                    </button>
-                  </div>        
-                </form>
+            <nav className="navbar navbar-expand-lg navbar-light" id='main-nav'>
+              <a className="navbar-brand">chonkrs</a>
+              <button className="navbar-toggler" type="button" data-toggle="collapse" 
+                data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" 
+                aria-expanded="false" aria-label="Toggle navigation">
+              <span className="navbar-toggler-icon"></span>
+              </button>
+              <div className="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul className="navbar-nav mr-auto">
+                  <ul className="nav-item" id='aboutbtn'>
+                    <button type="button" className="btn btn-primary" id='aboutbtn'>About</button> 
+                  </ul>
+                    <ul className="nav-item" id='faqbtn'>
+                    <button type="button" className="btn btn-primary" id='faqbtn'
+                    onClick={() => {$('#faqModal').modal('show')}}>FAQs</button> 
+                  </ul>
+                </ul>
+              </div>
+            </nav>
+
+           <div className="modal fade bd-example-modal-lg" id="faqModal" tabIndex="-1" 
+              role="dialog" aria-labelledby="faqModalLabel" aria-hidden="true">
+            <div className="modal-dialog modal-lg" id='faqs'>
+              <div className="modal-content" id='faqs'>
+                <div className="modal-header">
+                  <h5 className="modal-title" id="faqModalLabel">Modal title</h5>
+                </div>
+
+                <div className="modal-body">
+                <p> Body goes here </p>
+                <img className='col-md-12' src='static/img/chonkchart.png'/>
+                </div>
+              </div>
+            </div>
+          </div>
+          </div>
+
+          <div className='container' id='main'>
+          <div id='mainTubs'>
+            <div className='col-xs-6 col-xs-offset-3 col-lg-12'>
+                <div className='row' id="main">
+                  <div id='logo' className='col-centered text-center'>
+                    <h1 className='logo'>chonkrs</h1>
+                  <form>
+                    <div id='search' className='intial-search'>
+                      <input className='form-control' name='search' type='text' 
+                        placeholder='Search' required onChange={this.handleInput}>
+                      </input>
+                      <button id='chonk-btn' className='btn btn-success' type='submit' 
+                        onClick={this.handleSubmit}>I'm Feeling Chonky
+                      </button>
+                    </div>        
+                  </form>
+                </div>
               </div>
             </div>
           </div>
@@ -118,13 +144,10 @@ class Search extends React.Component {
       );
     }
 
-
     else {
       return (
-        <div>
-
-          <nav className="navbar navbar-expand-lg navbar-light bg-light">
-
+        <div id='res'>
+          <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
             <button className="navbar-toggler" type="button" data-toggle="collapse" 
             data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" 
             aria-expanded="false" aria-label="Toggle navigation">
@@ -132,7 +155,6 @@ class Search extends React.Component {
             </button>
             <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav mr-auto">
-      
             <form className="form-inline my-2 my-lg-0">
               <div className="md-form my-0">
               <select className="form-control mr-sm-2" name='thickness' id='thickness' 
@@ -152,19 +174,18 @@ class Search extends React.Component {
                 <option value='other'>Other</option>
               </select>
               <input name='miles' id='miles' type='text' 
-                     style={{display: this.element ? 'block' : 'none'}}></input>            
+                     style={{display: this.element ? 'block' : 'none'}}>
+              </input>            
               </div>
-             <div className="md-form my-0">
-              <input className="form-control mr-sm-2" name='search' id='search' 
-                defaultValue={this.state.search} type='text' 
-                onChange={this.handleInput}></input>
-
-             </div>
+               <div className="md-form my-0">
+                <input className="form-control mr-sm-2" name='search' id='search' 
+                  defaultValue={this.state.search} type='text' 
+                  onChange={this.handleInput}></input>
+               </div>
               </form>
             </ul>
            </div>
          </nav>
-
           <div id="response-all-cats">
             <TubboContainer
               cats={this.state.catResults}
@@ -173,7 +194,6 @@ class Search extends React.Component {
               newFilter={this.inputNew.bind(this)}
             /> 
           </div>  
-
         </div>        
       );
     }
@@ -219,13 +239,13 @@ class TubboContainer extends React.Component {
     if (this.props.cats) {
       return (
         <div className='container' id='allfilters'>
-          <div className='row'>
-          <div className='col-xs-12 col-md-9 order-md-12' id='div-cats'>
+          <div className='row' id='rep-img'>
+          <div className='col-xs-10 col-md-9 order-md-9' id='div-cats'>
             <div id='prop-all-cats'>
               {this.makeCats()}       
             </div>
           </div>
-          <div className='col-xs-12 col-md-3 order-md-1' id='div-fil'>
+          <div className='col-xs-2 col-md-3 order-md-3' id='div-fil'>
            <form  id='filterResults'>
             <div>
               <div id='colorFilter'>
@@ -317,7 +337,7 @@ class Cat extends React.Component {
         <a href="#moreDetailsModal">
        <button onClick={this.onButtonClick} id="cat-btn">
           <img className="img-top" src={this.props.photo}/>
-          <p className='img-name'>{this.props.name}</p>
+          <p id='cat-name'>{this.props.name}</p>
         </button></a>
         <div id="cat-more-details">
           {this.state.shelterInfo ?
@@ -388,25 +408,22 @@ class MoreDetails extends React.Component {
           <div className="modal-dialog" role="document">
             <div className="modal-content">
               <div className="modal-header">
-                <h5 className="modal-title" id="moreDetailsModalLabel">Modal title</h5>
+                <h5 className="modal-title" id="moreDetailsModalLabel">{this.props.name}</h5>
                 <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
               <div className="modal-body">
                 <div id='catSummary'>
-                  <img className="img-top" src={this.props.photo}/>
-                  <h4>{this.props.name}</h4>
-                  <p>{this.props.breed}</p>
+                  <img className="img-top" id='modal-pic' src={this.props.photo}/>
                 </div>
                 <div id='about'>
-                  <h4>About</h4>
+                  <br></br>
+                  <h5>About</h5>
                   <p>
-                    Coat Length
+                    Coat Length:&nbsp;{this.props.coatLen}
                       <br></br>
-                      {this.props.coatLen}
-                      <br></br>
-                    House-Trained
+                    Breed:&nbsp;{this.props.breed}
                       <br></br>
                     Health
                       <br></br>
@@ -415,10 +432,11 @@ class MoreDetails extends React.Component {
                   </p>
                 </div>
                 <div id='shelterSummary'>
-                  <h4>{this.props.shelter['shelterName']}</h4>
+                  <h5>{this.props.shelter['shelterName']}</h5>
                   <div id='map' ref={this.googleMapRef} style={{width: 350, height: 250}}></div>
                   <p>
-                    Address: 
+                  <br></br>
+                    <b>Address:</b> 
                       <br></br>
                       {this.props.shelter['address']}
                       <br></br>
@@ -434,7 +452,7 @@ class MoreDetails extends React.Component {
               </div>
               <div className="modal-footer">
                 <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" className="btn btn-primary">Save changes</button>
+                <button type="button" className="btn btn-primary">Save to Favs</button>
               </div>
             </div>
           </div>
