@@ -193,6 +193,10 @@ div#catSummary {
   padding-left: 24px;
 }
 
+div.modal-header#chonkDef {
+  padding-bottom: 10px;
+}
+
 /*more details modal*/
 .modal.right .modal-dialog {
   position: fixed;
@@ -307,6 +311,9 @@ div#genderFiler {
 .modal .modal-content#faqs{
   height: 65%;
 }
+
+
+
 
 
 

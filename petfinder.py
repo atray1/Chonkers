@@ -38,7 +38,7 @@ def get_breeds():
     for breed in data['breeds']:
         breeds['breeds'].append(breed['name'])
 
-    return data
+    return breeds
 
 
 def get_colors():

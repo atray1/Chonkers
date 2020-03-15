@@ -106,8 +106,9 @@ class Search extends React.Component {
               role="dialog" aria-labelledby="faqModalLabel" aria-hidden="true">
             <div className="modal-dialog modal-lg" id='faqs'>
               <div className="modal-content" id='faqs'>
-                <div className="modal-header">
-                  <h5 className="modal-title" id="faqModalLabel">Modal title</h5>
+                <div className="modal-header" id='chonkDef'>
+                  <h5 className="modal-title" id="faqModalLabel">
+                  Chonk: that which is fat or large, in a way that is majestic</h5>
                 </div>
 
                 <div className="modal-body">
