@@ -5,7 +5,6 @@ from model import connect_to_db, db
 
 
 app = Flask(__name__)
-#app.secret_key = "ABC"
 app.jinja_env.undefined = StrictUndefined
 
 
@@ -18,9 +17,19 @@ def react():
 @app.route('/results.json', methods=['POST'])
 def cat_results_react():
     """Based on user search, display cats - get animals endpoint"""
+
+    location_search = request.form.get('search')
+    if location_search == 'San Francisco, CA':
+        cats = petfinder.fake_cat_data_map()
+        if cats:
+            cats = list(cats.values())
+        else:
+            cats = cats
+        print('CATS', cats)    
     
-    cats = petfinder.search_data_map()
-    cats = list(cats.values())
+    else:
+        cats = petfinder.search_data_map()
+        cats = list(cats.values())
 
     return jsonify(cats)
 
@@ -47,6 +56,7 @@ def tubbo_location():
     shelter_id = request.form.get('shelter_id')
     shelter = petfinder.shelter_data_map(shelter_id)
     shelter = list(shelter.values())
+    print('SHELTER', shelter)
 
     return jsonify(shelter)
 

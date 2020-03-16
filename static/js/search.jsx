@@ -1,7 +1,4 @@
-//show results based on distance 
-function showMap(position) {
-
-}
+function showMap(position) {}
 
 class Search extends React.Component {    
   constructor() {
@@ -14,16 +11,19 @@ class Search extends React.Component {
                   coat: undefined,
                   gender: undefined,
                   catResults: undefined,
+                  currentlySelectedCat: undefined,
+                  selectedCatShelter: undefined,
                   colArr: [],
                   catBreeds: []};
     this.handleInput = this.handleInput.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.noResults = this.noResults.bind(this);
   }
 
-  // componentDidMount() {
-  //   $.get('/breeds.json', (response) => {this.setState({catBreeds: response.breeds})});
-  //   $.get('/colors.json', (response) => {this.setState({colArr: response.colors})});
-  // }
+  componentDidMount() {
+    $.get('/breeds.json', (response) => {this.setState({catBreeds: response.breeds})});
+    $.get('/colors.json', (response) => {this.setState({colArr: response.colors})});
+  }
 
   handleInput(e) {
     if (this.state.catResults) {
@@ -66,12 +66,32 @@ class Search extends React.Component {
                        breed: breed,
                        coat: coat,
                        gender: gender}; 
-  //loading is true show dancing fat cat
-    $.post('/results.json', search_data, (response) => { 
-      this.setState({catResults: response}); //, () => {
-        // loading = false
-    });
+    $.post('/results.json', search_data, (response) => {this.noResults(response)});
   }  
+
+  noResults(response) {
+    if (response === null) {
+      alert('Sorry, no results fit your search criteria.')
+    }
+    else {
+      this.setState({catResults: response})
+    }
+  }
+
+  updateCurrentlySelectedCat(selectedCat) {
+    for (const newCat of this.state.catResults) {
+      if (selectedCat === newCat['cat_id']) { 
+        console.log('the new cat info', newCat)
+        if (newCat['shelter_id']) {
+          let shelterId = newCat['shelter_id']
+          let shelter = {'shelter_id': shelterId}
+          $.post('/shelter.json', shelter, (response) => {
+            this.setState({currentlySelectedCat: newCat, selectedCatShelter: response[0]}, () => {$('#moreDetailsModal').modal('show')});
+          });     
+        }
+      }
+    }
+  }
 
 
   render() {
@@ -129,7 +149,7 @@ class Search extends React.Component {
                   <form>
                     <div id='search' className='intial-search'>
                       <input className='form-control' name='search' type='text' 
-                        placeholder='Search' required onChange={this.handleInput}>
+                        placeholder='San Francisco, CA' required onChange={this.handleInput}>
                       </input>
                       <button id='chonk-btn' className='btn btn-success' type='submit' 
                         onClick={this.handleSubmit}>I'm Feeling Chonky
@@ -192,9 +212,19 @@ class Search extends React.Component {
               cats={this.state.catResults}
               arr={this.state.colArr}
               breedArr={this.state.catBreeds}
+              updateSelectedCat={this.updateCurrentlySelectedCat.bind(this)}
               newFilter={this.inputNew.bind(this)}
             /> 
-          </div>  
+          </div> 
+            <div id="cat-more-details">
+            {this.state.currentlySelectedCat ?
+            <MoreDetails 
+              chosenCat={this.state.currentlySelectedCat}
+              shelter={this.state.selectedCatShelter}
+            /> :
+            null
+           }
+           </div>
         </div>        
       );
     }
@@ -213,6 +243,7 @@ class TubboContainer extends React.Component {
     for (const cat of this.props.cats) {
       cats.push(<Cat 
                   key={cat.cat_id}
+                  catId={cat.cat_id}
                   name={cat.name}
                   photo={cat.photo_url.medium}
                   gender={cat.gender}
@@ -224,19 +255,17 @@ class TubboContainer extends React.Component {
                   dogs={cat.environment.dogs}
                   cats={cat.environment.cats}
                   shelterId={cat.shelter_id}
+                  updateSelectedCat={this.props.updateSelectedCat}
                 />
                );
     }
     return cats
   }
 
-           //      <div className='row'></div>
-           //    <div className='container'></div>
-           // <div className='col-3'></div>
 
 
   render() {
-
+    
     if (this.props.cats) {
       return (
         <div className='container' id='allfilters'>
@@ -253,6 +282,7 @@ class TubboContainer extends React.Component {
                 <select className="form-control" name='color' 
                   onChange={this.props.newFilter}>
                   <option selected>Color</option>
+                  <option>Black & Brown</option>
                   {this.props.arr.map((x,y) => <option key={y}>{x}</option>)}
                 </select>
               </div>
@@ -260,6 +290,7 @@ class TubboContainer extends React.Component {
                 <select className="form-control" 
                    name='breed' onChange={this.props.newFilter}>
                    <option selected>Breed</option>
+                   <option>Ragdoll</option>
                    {this.props.breedArr.map((x,y) => <option key={y}>{x}</option>)}        
                 </select>
               </div>
@@ -291,7 +322,7 @@ class TubboContainer extends React.Component {
 
     else {
       return (
-        <div></div>
+       <div></div>
       );
     }
   }
@@ -301,34 +332,12 @@ class TubboContainer extends React.Component {
 class Cat extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {shelterInfo: undefined,}
     this.onButtonClick = this.onButtonClick.bind(this);
-    this.shelterInfo = this.shelterInfo.bind(this);
   }
 
-  shelterInfo(response) {
-    const tubboLocation = []
-    let res = response[0]
-    tubboLocation.push(<MoreDetails 
-                        key={res.shelter_id}
-                        shelterName={res.name}
-                        phone={res.phone}
-                        url={res.url}
-                        email={res.email}
-                        address={res.location.address}
-                        city={res.location.city}
-                        state={res.location.state}
-                        zipcode={res.location.zipcode}
-                      />
-        );
-    this.setState({shelterInfo: tubboLocation}, () => {$('#moreDetailsModal').modal('show')});
-  }
-
-  onButtonClick() {
-    let shelter = {'shelter_id': this.props.shelterId};
-    $.post('/shelter.json', shelter, (response) => {
-      this.shelterInfo(response)
-    });
+  onButtonClick(e) {
+    let selectedCat = this.props.catId;
+    this.props.updateSelectedCat(selectedCat);
   }
 
   render() {
@@ -336,23 +345,11 @@ class Cat extends React.Component {
     return (
       <div id="individ-cat">
         <a href="#moreDetailsModal">
-       <button onClick={this.onButtonClick} id="cat-btn">
-          <img className="img-top" src={this.props.photo}/>
-          <p id='cat-name'>{this.props.name}</p>
-        </button></a>
-        <div id="cat-more-details">
-          {this.state.shelterInfo ?
-            <MoreDetails name={this.props.name}
-                         breed={this.props.breed}
-                         gender={this.props.gender}
-                         color={this.props.color}
-                         coatLen={this.props.coatLen}
-                         photo={this.props.photo}
-                         shelter={this.state.shelterInfo[0]['props']}
-            /> :
-            null
-          }        
-        </div>               
+         <button onClick={this.onButtonClick} id="cat-btn">
+            <img className="img-top" src={this.props.photo}/>
+            <p id='cat-name'>{this.props.name}</p>
+          </button>
+        </a>             
       </div>
     );
   }
@@ -376,7 +373,7 @@ class MoreDetails extends React.Component {
 
 
   geo = () => {
-    let shel = this.props.shelter;
+    let shel = this.props.shelter['location'];
     let address = shel['address'] + ',' + shel['city'] + ',' + shel['state'] + ',' + 'United States';
     let geocoder = new google.maps.Geocoder();
     let map;
@@ -393,63 +390,70 @@ class MoreDetails extends React.Component {
                                                     url:'static/img/cat19-512.png',
                                                     scaledSize: {width: 50,
                                                                  height: 50}
-                                                  }});
+                                                 }});
       return marker
     });
   }
 
 
-
   render() {
 
+    console.log('In more details', this.props.shelter)
+    console.log(this.props.shelter['address'])
+    console.log(this.props.shelter['city'])
+    console.log(this.props.shelter['state'])
+
     return (
+      
       <div id='fatty-modal'>
         <div className="modal right fade" id="moreDetailsModal" tabIndex="-1" 
               role="dialog" aria-labelledby="moreDetailsModalLabel" aria-hidden="true">
           <div className="modal-dialog" role="document">
             <div className="modal-content">
               <div className="modal-header">
-                <h5 className="modal-title" id="moreDetailsModalLabel">{this.props.name}</h5>
+                <h5 className="modal-title" id="moreDetailsModalLabel">{this.props.chosenCat.name}</h5>
                 <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
                 </button>
+                  <span aria-hidden="true">&times;</span>
               </div>
               <div className="modal-body">
                 <div id='catSummary'>
-                  <img className="img-top" id='modal-pic' src={this.props.photo}/>
+                  <img className="img-top" id='modal-pic' src={this.props.chosenCat.photo_url.medium}/>
                 </div>
                 <div id='about'>
                   <br></br>
                   <h5>About</h5>
                   <p>
-                    Coat Length:&nbsp;{this.props.coatLen}
+                    Breed:&nbsp;{this.props.chosenCat.breed}
                       <br></br>
-                    Breed:&nbsp;{this.props.breed}
+                    Gender:&nbsp;{this.props.chosenCat.gender}
+                      <br></br>                                            
+                    Coat Length:&nbsp;{this.props.chosenCat.coat_len}
                       <br></br>
-                    Health
-                      <br></br>
-                    Adoption Fee
+                    Coat Color:&nbsp;{this.props.chosenCat.color}
                       <br></br>
                   </p>
                 </div>
+                {
                 <div id='shelterSummary'>
-                  <h5>{this.props.shelter['shelterName']}</h5>
+                  <h5>{this.props.shelter['name']}</h5>
                   <div id='map' ref={this.googleMapRef} style={{width: 350, height: 250}}></div>
                   <p>
                   <br></br>
                     <b>Address:</b> 
                       <br></br>
-                      {this.props.shelter['address']}
+                      {this.props.shelter['location']['address']}
                       <br></br>
-                      {this.props.shelter['city']},&nbsp;
-                      {this.props.shelter['state']}&nbsp;
-                      {this.props.shelter['zipcode']}
+                      {this.props.shelter['location']['city']},&nbsp;
+                      {this.props.shelter['location']['state']}&nbsp;
+                      {this.props.shelter['location']['zipcode']}
                       <br></br>
                       {this.props.shelter['email']}
                       <br></br>
                       {this.props.shelter['phone']}
                   </p>
                 </div>
+              }
               </div>
               <div className="modal-footer">
                 <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
