@@ -39,17 +39,34 @@ margin: 0px;
   -webkit-font-smoothing: auto;
 }
 
+img.col-md-12#chart {
+  padding-left: 0px;
+  padding-left: 0px;
+}
+
 button#faqbtn.btn.btn-primary {
   color: rgba(0,0,0,.5);
   background-color: transparent;
   border-color: transparent;
-  font: 15px Raleway;
-  padding: 8px 0px;
+  font: 1.30rem Raleway;
+  padding-left: 18px
 }
 
 /*front page*/
 #main-nav {
   margin-top: -40px;
+}
+
+p#defs {
+  font-size: 18px;
+}
+
+h5#defs {
+  font-size: 23px;
+}
+
+#navmain{
+  font-size: 1.55rem;
 }
 
 div.row#main {
@@ -61,6 +78,7 @@ div.row#main {
   transition: 0.3s ease;
   filter: brightness(115%);
   margin: 0;
+  background-color: white;
 }
 
 h1.logo {
@@ -75,12 +93,8 @@ h1.logo {
 
 div.container#main {
   height: 1200px;
-  width: 1000px; 
-  background: floralwhite;
-}
-
-html, body, div#app, div.container#main {
-  background-color: floralwhite;
+  width: 1000px;
+  background-color: lightgray; 
 }
 
 .intial-search {
@@ -97,9 +111,30 @@ html, body, div#app, div.container#main {
   border-color: #4682B4;
 }
 
+#favs-btn {
+  -webkit-font-smoothing: auto;
+  background-color: #4682B4;
+  border-color: #4682B4;
+}
+
 div#res {
   margin-top: -40px;
   margin-bottom: -40px;
+}
+
+h5#moreDetailsModalLabel {
+  font-size:1.90rem;
+  font-family: 'Raleway';
+}
+
+h5#shelTitle {
+  font-size:1.90rem;
+  font-family: 'Raleway';
+}
+
+h5#aboutCat {
+  font-size:1.90rem;
+  font-family: 'Raleway';
 }
 
 /*second page*/
@@ -109,11 +144,10 @@ div#response-all-cats {
 
 div.row#rep-img {
   margin-bottom: -40px;
+  width: inherit;
   background-image: url("https://i.postimg.cc/SxQzNNzg/shadow-cats-watercolor-png-black-cat-drawing-cute-11563015027hbj.png");
   background-repeat: repeat;
   background-size: 500px;
-
-
 }
 
 p.img-name {
@@ -229,6 +263,13 @@ div.modal-header#chonkDef {
 .modal.right.fade.show .modal-dialog {
   right: 0;
 }
+html, body, div#app, div.container#main {
+  background-color: lightgray;
+}
+
+div#maintubs {
+  background-color: lightgray;
+}
 
 #mainTubs {
   width: 100%;
@@ -236,10 +277,14 @@ div.modal-header#chonkDef {
   object-fit: cover;
 }
 
+div#maincon {
+  border-radius: 30px;
+}
+
 body {
   margin: 40px 0;
   font-family: "Raleway";
-  font-size: 14px;
+  font-size: 18px;
   font-weight: 500;
   -webkit-font-smoothing: antialiased;
 }
@@ -259,12 +304,8 @@ $card-bg-color: #C8A455;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: "Verdana";
+  font-family: "Raleway";
 }
-/*
-body{
-  background-color: #d2d2d2;
-}*/
 
 .card-wrapper {
   margin: 10px;
@@ -309,7 +350,7 @@ div#genderFiler {
 }
 
 .modal .modal-content#faqs{
-  height: 65%;
+  height: 45%;
 }
 
 

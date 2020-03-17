@@ -1,5 +1,3 @@
-function showMap(position) {}
-
 class Search extends React.Component {    
   constructor() {
     super();
@@ -66,6 +64,7 @@ class Search extends React.Component {
                        breed: breed,
                        coat: coat,
                        gender: gender}; 
+     console.log('size', thickness)
     $.post('/results.json', search_data, (response) => {this.noResults(response)});
   }  
 
@@ -97,13 +96,12 @@ class Search extends React.Component {
   render() {
 
     if (this.state.catResults === undefined) {
-      navigator.geolocation.getCurrentPosition(showMap);
       return (
         <div>
           <div>
 
             <nav className="navbar navbar-expand-lg navbar-light" id='main-nav'>
-              <a className="navbar-brand">chonkrs</a>
+              <a className="navbar-brand" id='navmain'>chonkrs</a>
               <button className="navbar-toggler" type="button" data-toggle="collapse" 
                 data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" 
                 aria-expanded="false" aria-label="Toggle navigation">
@@ -111,12 +109,9 @@ class Search extends React.Component {
               </button>
               <div className="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul className="navbar-nav mr-auto">
-                  <ul className="nav-item" id='aboutbtn'>
-                    <button type="button" className="btn btn-primary" id='aboutbtn'>About</button> 
-                  </ul>
                     <ul className="nav-item" id='faqbtn'>
                     <button type="button" className="btn btn-primary" id='faqbtn'
-                    onClick={() => {$('#faqModal').modal('show')}}>FAQs</button> 
+                    onClick={() => {$('#faqModal').modal('show')}}>About</button> 
                   </ul>
                 </ul>
               </div>
@@ -127,13 +122,16 @@ class Search extends React.Component {
             <div className="modal-dialog modal-lg" id='faqs'>
               <div className="modal-content" id='faqs'>
                 <div className="modal-header" id='chonkDef'>
-                  <h5 className="modal-title" id="faqModalLabel">
-                  Chonk: that which is fat or large, in a way that is majestic</h5>
+                  <h4 className="modal-title" id="faqModalLabel">
+                  Chonk: that which is fat or large, in a way that is majestic</h4>
                 </div>
-
                 <div className="modal-body">
-                <p> Body goes here </p>
-                <img className='col-md-12' src='static/img/chonkchart.png'/>
+                  <h5 id='defs'>chonkrs Filter Definitions</h5>
+                  <p id='defs'> All Chonks Need Love: displays both jumbo and colossal chonks<br/>
+                    Jumbo Chonk: large in size, 30-40% body fat <br/>
+                    Colossal Chonk: extra large in size, 40-50% body fat
+                  </p>
+                <img className='col-md-12' id='chart' src='static/img/chonkchart.png'/>
                 </div>
               </div>
             </div>
@@ -142,7 +140,7 @@ class Search extends React.Component {
 
           <div className='container' id='main'>
           <div id='mainTubs'>
-            <div className='col-xs-6 col-xs-offset-3 col-lg-12'>
+            <div className='col-xs-6 col-xs-offset-3 col-lg-12' id='maintcon'>
                 <div className='row' id="main">
                   <div id='logo' className='col-centered text-center'>
                     <h1 className='logo'>chonkrs</h1>
@@ -364,7 +362,7 @@ class MoreDetails extends React.Component {
 
   componentDidMount() {
     const googleMapScript = document.createElement("script")
-    googleMapScript.src = 'https://maps.googleapis.com/maps/api/js?key=&libraries=places'
+    googleMapScript.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDC-y1dMTTh5g5dhr5KmpnOg7FEt5FB3Es&libraries=places'
     window.document.body.appendChild(googleMapScript)
     googleMapScript.addEventListener('load', () => {
       this.shelter = this.geo() 
@@ -422,7 +420,7 @@ class MoreDetails extends React.Component {
                 </div>
                 <div id='about'>
                   <br></br>
-                  <h5>About</h5>
+                  <h5 id='aboutCat'>About</h5>
                   <p>
                     Breed:&nbsp;{this.props.chosenCat.breed}
                       <br></br>
@@ -436,7 +434,7 @@ class MoreDetails extends React.Component {
                 </div>
                 {
                 <div id='shelterSummary'>
-                  <h5>{this.props.shelter['name']}</h5>
+                  <h5 id='shelTitle'>{this.props.shelter['name']}</h5>
                   <div id='map' ref={this.googleMapRef} style={{width: 350, height: 250}}></div>
                   <p>
                   <br></br>
@@ -457,7 +455,7 @@ class MoreDetails extends React.Component {
               </div>
               <div className="modal-footer">
                 <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" className="btn btn-primary">Save to Favs</button>
+                <button type="button" className="btn btn-primary" id='favs-btn'>Save to Favs</button>
               </div>
             </div>
           </div>
@@ -468,7 +466,6 @@ class MoreDetails extends React.Component {
 }
 
       
-
 
 ReactDOM.render(
   <Search />,

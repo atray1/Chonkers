@@ -24,8 +24,7 @@ def cat_results_react():
         if cats:
             cats = list(cats.values())
         else:
-            cats = cats
-        print('CATS', cats)    
+            cats = cats  
     
     else:
         cats = petfinder.search_data_map()
@@ -56,7 +55,6 @@ def tubbo_location():
     shelter_id = request.form.get('shelter_id')
     shelter = petfinder.shelter_data_map(shelter_id)
     shelter = list(shelter.values())
-    print('SHELTER', shelter)
 
     return jsonify(shelter)
 

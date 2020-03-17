@@ -1,9 +1,7 @@
 import requests
 import os
-from pprint import pformat
 from flask import request
 import json
-import fake_chonks
 
 
 API_KEY = os.environ['PETFINDER_KEY']
@@ -71,9 +69,8 @@ def search_petfinder():
     coat = request.form.get('coat', '')
     gender = request.form.get('gender', '')
 
-   
     payload = {'type': 'Cat',
-                   'limit': 5, 
+                   'limit': 25, 
                    'location': location_search,
                    'color': color,
                    'distance': miles,
@@ -93,7 +90,7 @@ def fake_cat_data_map():
 
     location_search = request.form.get('search')
     miles = int(request.form.get('miles', '100'))
-    size = request.form.get('thickness', '')
+    size = request.form.get('thickness', 'large,xlarge')
     color = request.form.get('color', 'Color')
     breed = request.form.get('breed', 'Breed')
     coat = request.form.get('coat', 'Coat Length')
@@ -101,7 +98,8 @@ def fake_cat_data_map():
 
     fatty_dict = {}
     fatty_filter = {}
-    for cat in open('test.txt'):
+    chonk_filter = {}
+    for cat in open('fakeChonksForFun.txt'):
         cat = cat.rstrip()
         cat = cat.split('|')
         fatty_dict[cat[0]] = {'cat_id': cat[0],
@@ -116,45 +114,51 @@ def fake_cat_data_map():
                         'extra_love': cat[8],
                         'environment': {'kids': cat[9],
                                         'dogs': cat[10],
-                                        'cats': cat[11]}}
+                                        'cats': cat[11]},
+                        'size': cat[12]}
 
-    if ((not color and not breed and not coat and not gender) or
-        (breed == 'Breed' and color == 'Color' and coat == 'Coat Length' and gender == 'Gender')):
+    if breed == 'Breed' and color == 'Color' and coat == 'Coat Length' and gender == 'Gender' and size == 'large,xlarge':
         return fatty_dict
 
     else:
+        b = breed == 'Breed'
+        cl = color == 'Color'
+        g = gender == 'Gender'
+        ct = coat == 'Coat Length'
+        s = size == 'large,xlarge'
         for c_id, info in fatty_dict.items():
             col = info['color'] == color
             bre = info['breed'] == breed
             cot = info['coat_len'] == coat
             gen = info['gender'] == gender
-
-            if ((col and bre and cot and gen) or
-                (breed == 'Breed' and col and cot and gen) or 
-                (color == 'Color' and bre and cot and gen) or
-                (coat == 'Coat Length' and col and bre and gen) or
-                (gender == 'Gender' and col and cot and bre) or
-                (breed == 'Breed' and color == 'Color' and cot and gender == 'Gender') or 
-                (breed == 'Breed' and col and coat == 'Coat Length' and gender == 'Gender') or
-                (bre and color == 'Color' and coat == 'Coat Length' and gender == 'Gender') or
-                (breed == 'Breed' and color == 'Color' and coat == 'Coat Length' and gen) or
-                (breed == 'Breed' and color == 'Color' and cot and gen) or
-                (breed == 'Breed' and col and coat == 'Coat Length' and gen) or
-                (breed == 'Breed' and col and cot and gender == 'Gender') or
-                (color == 'Color' and breed == 'Breed' and cot and gen) or
-                (color == 'Color' and bre and coat == 'Coat Length' and gen) or
-                (color == 'Color' and bre and cot and gender == 'Gender') or
-                (coat == 'Coat Length' and breed == 'Breed' and col and gen) or
-                (coat == 'Coat Length' and bre and color == 'Color' and gen) or
-                (coat == 'Coat Length' and bre and col and gender == 'Gender') or
-                (gender == 'Gender' and breed == 'Breed' and col and cot) or
-                (gender == 'Gender' and bre and color == 'Color' and cot) or
-                (gender == 'Gender' and bre and col and coat == 'Coat Length')):
+            si = info['size'] == size
+            if ((col and bre and cot and gen and si) or
+                (b and col and cot and gen and si) or (cl and bre and cot and gen and si) or 
+                (ct and col and bre and gen and si) or (g and col and cot and bre and si) or
+                (s and col and cot and bre and gen) or (b and cl and cot and g and s) or 
+                (b and col and ct and g and s) or (bre and cl and ct and g and s) or
+                (b and cl and ct and g and si) or (b and cl and ct and gen and s) or
+                (b and cl and cot and gen and si) or (b and col and ct and gen and si) or
+                (b and col and cot and g and si) or (cl and b and cot and gen and si) or
+                (cl and bre and ct and gen and si) or (cl and bre and cot and g and si) or 
+                (ct and b and col and gen and si) or (ct and bre and cl and gen and si) or
+                (ct and bre and col and g and si) or (g and b and col and cot and si) or
+                (g and bre and cl and cot and si) or (g and bre and col and ct and si) or                
+                (s and b and col and cot and si and gen) or (s and bre and cl and cot and si and gen) or
+                (s and bre and col and ct and si and gen) or (b and cl and ct and gen and si) or
+                (b and cl and cot and g and si) or (b and col and ct and g and si) or
+                (b and col and cot and g and s) or (cl and b and ct and gen and si) or
+                (cl and b and cot and g and si) or (cl and bre and ct and g and si) or
+                (cl and bre and cot and g and s) or (ct and b and cl and gen and si) or
+                (ct and b and col and g and si) or (ct and bre and cl and g and si) or
+                (ct and bre and col and g and s) or (g and b and cl and cot and si) or
+                (g and b and col and ct and si) or (g and bre and cl and ct and si) or
+                (g and bre and col and ct and s) or (s and b and cl and cot and gen) or
+                (s and b and col and ct and gen) or (s and bre and cl and ct and gen) or
+                (s and bre and col and ct and g)): 
                 fatty_filter[c_id] = info
         if fatty_filter:
             return fatty_filter
-
-
 
 
 def search_data_map():
@@ -218,8 +222,5 @@ def shelter_data_map(shelter_id):
                             }
 
     return shelter_details
-
-
-
 
 

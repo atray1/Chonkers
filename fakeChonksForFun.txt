@@ -1,0 +1,44 @@
+1|Burrito|Female|Biocolor|CA2372|https://i.postimg.cc/Y9KH8qCK/1-47-28.jpg|Short|Gray & White|False|True|False|True|xlarge|
+21|Poof|Female|Maine Coon|CA665|https://i.postimg.cc/90gg8JYR/1-52-01.jpg|Short|Gray & White|False|True|False|True|xlarge|
+2|Budha|Male|American Bobtail|CA2372|https://i.postimg.cc/nz4tWbXs/1-47-56.jpg|Short|Brown & White|False|True|False|True|xlarge|
+4|Cannoli|Female|Tuxedo|CA2372|https://i.postimg.cc/FzhQ5WST/1-48-21.jpg|Long|Black & White|False|True|False|True|xlarge|
+5|Quake|Female|Tuxedo|CA2372|https://i.postimg.cc/5NNMsrb0/1-48-34.jpg|Long|Black & White|False|True|False|True|xlarge|
+6|Atom|Female|American Wirehair|CA665|https://i.postimg.cc/RZ25VVf6/1-48-45.jpg|Medium|Brown & White|True|True|True|False|xlarge|
+7|Biggie|Male|Calico|CA665|https://i.postimg.cc/xjP2yQrh/1-48-55.jpg|Medium|Black & White|True|True|True|False|xlarge|
+8|Avocado|Female|Biocolor|CA665|https://i.postimg.cc/zBS9jCQK/1-49-05.jpg|Medium|Gray & White|True|True|True|False|xlarge|
+9|Wobbles|Female|Russian Blue|CA2372|https://i.postimg.cc/ncRfg1h1/1-49-14.jpg|Medium|Gray|True|True|True|False|large|
+10|Spud|Male|Russian Blue|CA2372|https://i.postimg.cc/P5Cnj8Ln/1-49-27.jpg|Short|Gray|True|True|True|False|xlarge|
+11|Taco|Female|Biocolor|CA665|https://i.postimg.cc/W4rRDL69/1-49-39.jpg|Medium|Gray & White|False|True|False|True|xlarge|
+12|Hammy|Female|Biocolor|CA2372|https://i.postimg.cc/0QqTDWV9/1-49-50.jpg|Short|Gray & White|False|True|False|True|xlarge|
+13|Kat|Female|Tuxedo|CA2372|https://i.postimg.cc/nrFNws85/1-50-15.jpg|Medium|Black & White|True|True|True|True|xlarge|
+14|Penny|Female|Orange Tabby|CA665|https://i.postimg.cc/Vsgx0Fnc/1-50-26.jpg|Medium|Orange|True|True|True|True|xlarge|
+15|Oscar|Male|Calico|CA2372|https://i.postimg.cc/MG1460qN/1-50-39.jpg|Medium|Black & Brown|True|True|True|True|xlarge|
+16|Lulu|Female|Orange Tabby|CA2372|https://i.postimg.cc/9QRKS5SW/1-50-49.jpg|Short|Orange|False|True|False|True|xlarge|
+17|Fat Tony|Male|Orange Tabby|CA665|https://i.postimg.cc/DyztrbP4/1-50-58.jpg|Medium|Orange|True|True|True|True|xlarge|
+18|Moon|Female|Orange Tabby|CA2372|https://i.postimg.cc/5ysDcxbt/1-51-06.jpg|Medium|Orange|True|True|True|True|xlarge|
+19|Burrito|Female|American Bobtail|CA665|https://i.postimg.cc/15YbJ5vC/1-51-14.jpg|Short|Brown|False|True|False|True|xlarge|
+20|Mac|Male|American Bobtail|CA2372|https://i.postimg.cc/xCR4H0kP/1-51-28.jpg|Short|Brown|True|True|True|True|xlarge|
+22|Donut|Female|Biocolor|CA665|https://i.postimg.cc/DZFN8WzZ/1-52-25.jpg|Long|Gray & White|False|True|False|True|xlarge|
+23|Sausage|Male|American Wirehair|CA2372|https://i.postimg.cc/dQ5fVVcs/1-52-40.jpg|Short|Brown & White|True|True|True|True|xlarge|
+24|Tubby|Female|American Bobtail|CA665|https://i.postimg.cc/QCdnJR1Z/1-53-07.jpg|Short|Brown|False|True|False|True|xlarge|
+25|Bon Bon|Male|Orange Tabby|CA665|https://i.postimg.cc/GmtKgF4G/Screen-Shot-2020-03-16-at-2-09-32-PM.jpg|Medium|Orange|True|True|True|True|xlarge|
+26|Dulce|Female|Biocolor|CA2372|https://i.postimg.cc/x1XG39ZP/Screen-Shot-2020-03-16-at-2-08-02-PM.jpg|Medium|Gray & White|False|True|False|True|xlarge|
+28|Snack|Male|American Shorthair|CA665|https://i.postimg.cc/ZRx65n9J/Screen-Shot-2020-03-16-at-2-08-51-PM.jpg|Medium|Brown & White|True|True|True|True|xlarge|
+29|Bear|Female|Bengal|CA2372|https://i.postimg.cc/FR4jv3HP/Screen-Shot-2020-03-16-at-2-09-05-PM.jpg|Medium|Brown|True|True|True|True|xlarge|
+30|Jabba|Male|Orange Tabby|CA2372|https://i.postimg.cc/j2qPwTNP/Screen-Shot-2020-03-16-at-2-09-53-PM.jpg|Medium|Orange|True|True|True|True|xlarge|
+31|Butterballs|Female|Cymric|CA2372|https://preview.redd.it/zah1ajcaerd41.jpg?width=640&crop=smart&auto=webp&s=ddcf64661e3b4df4a3365f5aa37c735438bd0ff6|Long|Brown|True|True|True|True|large|
+32|Tank|Female|Blue Persian|CA665|https://preview.redd.it/d1vz0v8quhd41.jpg?width=640&crop=smart&auto=webp&s=f344f2525ac09c242e8f330cd14b3ecce77d9d07|Long|Gray|True|True|True|False|xlarge|
+10|Dumpling|Female|American Wirehair|CA665|https://i.postimg.cc/nh2by2QD/Screen-Shot-2020-03-11-at-8-39-38-PM.jpg|Medium|Brown & White|True|True|True|True|xlarge|
+33|Twinkie|Male|Orange Tabby|CA665|https://i.postimg.cc/P5293qBb/Screen-Shot-2020-03-11-at-8-42-21-PM.jpg|Short|Orange|True|False|True|True|xlarge|
+34|Bear|Female|American Wirehair|CA665|https://preview.redd.it/3o06726eaie41.jpg?width=640&crop=smart&auto=webp&s=4836166f0bcd7c260d5a527992d2d8730dbbc5b6|Short|Brown & White|True|True|True|False|large|
+35|Bacon|Male|American Wirehair|CA665|https://preview.redd.it/zunijm66kle41.jpg?width=640&crop=smart&auto=webp&s=50b4866bbb87107d0445f9065ef0de7ae59a9a19|Short|Brown & White|True|True|True|True|large|
+36|Cookie|Female|Orange Tabby|CA665|https://preview.redd.it/s49z1mwz9le41.jpg?width=640&crop=smart&auto=webp&s=32e6f9475229d6130d58a228c83a892317187ec7|Short|Orange & White|False|True|False|False|large|
+37|Taco|Male|Siamese|CA665|https://preview.redd.it/7c9akteuqae41.jpg?width=640&crop=smart&auto=webp&s=88bee73ac0a995ed4580b3ebd8d3288164363e96|Long|Chocolate Point|False|True|False|True|large|
+38|Lucy|Female|Domestic Longhair|CA665|https://preview.redd.it/kwrlvyswk5e41.jpg?width=640&crop=smart&auto=webp&s=6641fd72f57db7d0ecc86f807b187251dfae1a56|Long|Brown & White|True|True|True|False|large|
+39|Fluffy|Male|Persian|CA665|https://preview.redd.it/w3hcift3p0e41.jpg?width=640&crop=smart&auto=webp&s=510ff3b7e8deef3551fce04a0566f887164892c2|Long|White|True|False|True|True|large|
+40|Oliver|Male|Calico|CA575|https://i.redd.it/34kyqovcvje41.jpg|Short|Black & Brown|False|True|False|True|xlarge|
+41|Budha|Female|American Shorthair|CA2372|https://preview.redd.it/euac1y8a4fe41.jpg?width=640&crop=smart&auto=webp&s=0bf516bb07ecfb0d3838656045be70f507de8809|Short|Brown|True|True|True|False|xlarge|
+42|Roly Poly|Male|Russian Blue|CA2372|https://i.redd.it/zgi188k5tle41.jpg|Short|Gray|True|True|True|False|xlarge|
+43|Tubby|Female|Ragdoll|CA2372|https://preview.redd.it/yeaa652z5ge41.jpg?width=640&crop=smart&auto=webp&s=e31a2bd5517e213aa62e596b855379879f8573b4|Medium|White|False|True|False|True|xlarge|
+44|Husky|Male|American Wirehair|CA2372|https://external-preview.redd.it/CjXBYojbycs9gYPGkybMj21JgDxxycz_8j_AE4MqzOc.jpg?width=640&crop=smart&auto=webp&s=65c94f408e7d7892fa4d81b67e44f1958511c562|Medium|Brown & White|True|False|True|False|xlarge|
+45|Stocky|Male|Tuxedo|CA2372|https://preview.redd.it/lpaqpoyaxud41.jpg?width=640&crop=smart&auto=webp&s=e7f007a36351bf966956280efbe3bcd8ef3f2a8e|Short|Black & White|False|True|False|True|xlarge|
