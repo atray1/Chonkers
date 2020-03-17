@@ -4,10 +4,10 @@ class Search extends React.Component {
     this.state = {search: undefined,
                   miles: 100, 
                   thickness: 'large,xlarge',
-                  color: undefined,
-                  breed: undefined,
-                  coat: undefined,
-                  gender: undefined,
+                  color: 'Color',
+                  breed: 'Breed',
+                  coat: 'Coat Length',
+                  gender: 'Gender',
                   catResults: undefined,
                   currentlySelectedCat: undefined,
                   selectedCatShelter: undefined,
@@ -25,16 +25,16 @@ class Search extends React.Component {
 
   handleInput(e) {
     if (this.state.catResults) {
-      let element = document.getElementById('miles');
-      if (e.target.name === 'miles' && e.target.value === 'other') {
-        element.style.display = 'block';
-      } 
+      if (e.target.name === 'search' && this.state.search !== undefined
+          && e.target.value !== this.state.search) {
+          let newSearch = e.target.value
+          this.setState({color: 'Color', breed: 'Breed', gender: 'Gender', 
+                        coat: 'Coat Length', search: newSearch}, (e) => {this.handleSubmit(e)});
+      }
       else {
-        element.style.display = 'none';
-      } 
-     this.setState({[e.target.name]: e.target.value}, (e) => {
-       this.handleSubmit(e)
-     });
+       this.setState({[e.target.name]: e.target.value}, (e) => {
+         this.handleSubmit(e)});
+      }
     }
     else {
       this.setState({[e.target.name]: e.target.value});
@@ -42,8 +42,15 @@ class Search extends React.Component {
   }
 
   inputNew(e) {
-    this.setState({[e.target.name]: e.target.value}, (e) => {
-      this.handleSubmit(e)});
+    if (e.target.name === 'search' && e.target.value !== this.state.search) {
+        let newSearch = e.target.value
+        this.setState({color: 'Color', breed: 'Breed', gender: 'Gender', 
+                      coat: 'Coat Length', search: newSearch}, (e) => {this.handleSubmit(e)});
+      }
+      else {
+       this.setState({[e.target.name]: e.target.value}, (e) => {
+         this.handleSubmit(e)});
+      }
     }
 
   handleSubmit(e) {
@@ -63,13 +70,12 @@ class Search extends React.Component {
                        color: color,
                        breed: breed,
                        coat: coat,
-                       gender: gender}; 
-     console.log('size', thickness)
+                       gender: gender};
     $.post('/results.json', search_data, (response) => {this.noResults(response)});
   }  
 
   noResults(response) {
-    if (response === null) {
+    if (response === null || response.length === 0) {
       alert('Sorry, no results fit your search criteria.')
     }
     else {
@@ -79,8 +85,7 @@ class Search extends React.Component {
 
   updateCurrentlySelectedCat(selectedCat) {
     for (const newCat of this.state.catResults) {
-      if (selectedCat === newCat['cat_id']) { 
-        console.log('the new cat info', newCat)
+      if (selectedCat === newCat['cat_id']) {
         if (newCat['shelter_id']) {
           let shelterId = newCat['shelter_id']
           let shelter = {'shelter_id': shelterId}
@@ -190,11 +195,7 @@ class Search extends React.Component {
                 <option value='25'>25 Miles</option>
                 <option value='50'>50 Miles</option>
                 <option value='100'>100 Miles</option>
-                <option value='other'>Other</option>
-              </select>
-              <input name='miles' id='miles' type='text' 
-                     style={{display: this.element ? 'block' : 'none'}}>
-              </input>            
+              </select>           
               </div>
                <div className="md-form my-0">
                 <input className="form-control mr-sm-2" name='search' id='search' 
@@ -212,6 +213,10 @@ class Search extends React.Component {
               breedArr={this.state.catBreeds}
               updateSelectedCat={this.updateCurrentlySelectedCat.bind(this)}
               newFilter={this.inputNew.bind(this)}
+              col={this.state.color}
+              bre={this.state.breed}
+              cot={this.state.coat}
+              gen={this.state.gender}
             /> 
           </div> 
             <div id="cat-more-details">
@@ -278,24 +283,24 @@ class TubboContainer extends React.Component {
             <div>
               <div id='colorFilter'>
                 <select className="form-control" name='color' 
-                  onChange={this.props.newFilter}>
-                  <option selected>Color</option>
+                defaultValue={this.props.col} onChange={this.props.newFilter}>
+                  <option>{this.props.col}</option>
                   <option>Black & Brown</option>
                   {this.props.arr.map((x,y) => <option key={y}>{x}</option>)}
                 </select>
               </div>
               <div id='breedFilter'>
-                <select className="form-control" 
+                <select className="form-control" defaultValue={this.props.bre}
                    name='breed' onChange={this.props.newFilter}>
-                   <option selected>Breed</option>
+                   <option>{this.props.bre}</option>
                    <option>Ragdoll</option>
                    {this.props.breedArr.map((x,y) => <option key={y}>{x}</option>)}        
                 </select>
               </div>
               <div id='coatFilter'>
                 <select className="form-control" name='coat' 
-                  onChange={this.props.newFilter}>
-                  <option selected>Coat Length</option>
+                  defaultValue={this.props.cot} onChange={this.props.newFilter}>
+                  <option>{this.props.cot}</option>
                   <option value='Long'>Long</option>
                   <option value='Medium'>Medium</option>
                   <option value='Short'>Short</option>
@@ -304,8 +309,8 @@ class TubboContainer extends React.Component {
               </div>
                 <div id='genderFiler'>
                   <select className="form-control" name='gender' 
-                  onChange={this.props.newFilter}>
-                    <option selected>Gender</option>
+                  defaultValue={this.props.gen} onChange={this.props.newFilter}>
+                    <option>{this.props.gen}</option>
                     <option value='Male'>Male</option>
                     <option value='Female'>Female</option>
                   </select>        
@@ -395,11 +400,6 @@ class MoreDetails extends React.Component {
 
 
   render() {
-
-    console.log('In more details', this.props.shelter)
-    console.log(this.props.shelter['address'])
-    console.log(this.props.shelter['city'])
-    console.log(this.props.shelter['state'])
 
     return (
       

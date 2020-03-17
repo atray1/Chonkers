@@ -69,6 +69,15 @@ def search_petfinder():
     coat = request.form.get('coat', '')
     gender = request.form.get('gender', '')
 
+    if color == 'Color':
+        color = ''
+    if breed == 'Breed':   
+        breed = ''
+    if coat == 'Coat Length':   
+        coat = ''
+    if gender == 'Gender':    
+        gender = ''
+
     payload = {'type': 'Cat',
                    'limit': 25, 
                    'location': location_search,
@@ -78,11 +87,37 @@ def search_petfinder():
                    'coat': coat,
                    'gender': gender,
                    'size': size}
-    
+    print('COLOR2', color)
     response = requests.get(url, headers=headers, params=payload)
     data = response.json() 
         
     return data
+
+
+def search_data_map():
+    """Mapping function to extract relevant information from search_petfinder"""
+    
+    fatty_dict = {}
+    cats = search_petfinder()
+    for cat in cats['animals']:
+        if cat['photos'] != []:
+            fatty_dict[cat['id']] = {
+                            'cat_id': cat['id'],
+                            'name': cat['name'], 
+                            'gender': cat['gender'],
+                            'breed': cat['breeds']['primary'],
+                            'shelter_id': cat['organization_id'], 
+                            'photo_url': {'medium': cat['photos'][0]['medium'], 
+                                          'large': cat['photos'][0]['large']},
+                            'coat_len': cat['coat'],
+                            'color': cat['colors']['primary'],
+                            'extra_love': cat['attributes']['special_needs'],
+                            'environment': {'kids': cat['environment']['children'],
+                                            'dogs': cat['environment']['dogs'],
+                                            'cats': cat['environment']['cats']}
+                            }
+
+    return fatty_dict
 
 
 def fake_cat_data_map():
@@ -117,7 +152,9 @@ def fake_cat_data_map():
                                         'cats': cat[11]},
                         'size': cat[12]}
 
-    if breed == 'Breed' and color == 'Color' and coat == 'Coat Length' and gender == 'Gender' and size == 'large,xlarge':
+    if ((breed == 'Breed' and color == 'Color' and coat == 'Coat Length' and 
+        gender == 'Gender' and size == 'large,xlarge') or (not breed and not color 
+        and not coat and not gender and size)):
         return fatty_dict
 
     else:
@@ -159,32 +196,6 @@ def fake_cat_data_map():
                 fatty_filter[c_id] = info
         if fatty_filter:
             return fatty_filter
-
-
-def search_data_map():
-    """Mapping function to extract relevant information from search_petfinder"""
-    
-    fatty_dict = {}
-    cats = search_petfinder()
-    for cat in cats['animals']:
-        if cat['photos'] != []:
-            fatty_dict[cat['id']] = {
-                            'cat_id': cat['id'],
-                            'name': cat['name'], 
-                            'gender': cat['gender'],
-                            'breed': cat['breeds']['primary'],
-                            'shelter_id': cat['organization_id'], 
-                            'photo_url': {'medium': cat['photos'][0]['medium'], 
-                                          'large': cat['photos'][0]['large']},
-                            'coat_len': cat['coat'],
-                            'color': cat['colors']['primary'],
-                            'extra_love': cat['attributes']['special_needs'],
-                            'environment': {'kids': cat['environment']['children'],
-                                            'dogs': cat['environment']['dogs'],
-                                            'cats': cat['environment']['cats']}
-                            }
-
-    return fatty_dict
 
 
 def shelter_info(shelter_id):
